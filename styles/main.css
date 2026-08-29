@@ -292,4 +292,164 @@
       flex-wrap: wrap;
       overflow-x: visible;
     }
+    /* ========================================
+   GUIDES — Section cartes micro-learning
+   ======================================== */
+.guides {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-md) var(--space-lg);
+}
+
+.guides__title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-xs);
+}
+
+.guides__subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.guides__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ========================================
+   CARD — Composant réutilisable
+   ======================================== */
+.card {
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: border-color 0.2s ease, transform 0.1s ease;
+}
+
+.card:active {
+  transform: scale(0.99);
+}
+
+/* Variante : risque élevé */
+.card--danger {
+  border-left: 3px solid var(--color-accent-red);
+}
+
+/* Variante : risque moyen */
+.card--warning {
+  border-left: 3px solid var(--color-accent-orange);
+}
+
+/* Variante : risque faible (pas de bordure colorée, juste la bordure par défaut) */
+
+/* --- Header de carte --- */
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.card__icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.card__risk {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.card__risk--danger {
+  background: rgba(231, 76, 60, 0.15);
+  color: var(--color-accent-red);
+}
+
+.card__risk--warning {
+  background: rgba(243, 156, 18, 0.15);
+  color: var(--color-accent-orange);
+}
+
+.card__risk--safe {
+  background: rgba(46, 204, 113, 0.15);
+  color: var(--color-accent-green);
+}
+
+/* --- Corps de carte --- */
+.card__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-xs);
+}
+
+.card__desc {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-bottom: var(--space-md);
+}
+
+/* --- Footer de carte --- */
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card__time {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.card__link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.card__link:hover,
+.card__link:focus-visible {
+  color: var(--color-primary-hover);
+}
+
+.card__link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   TABLETTE & DESKTOP — Cartes
+   ======================================== */
+@media (min-width: 768px) {
+  .guides {
+    max-width: 720px;
+  }
+
+  .guides__title {
+    font-size: 1.8rem;
+  }
+
+  .guides__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+}
   }
