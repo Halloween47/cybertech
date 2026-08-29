@@ -1,0 +1,295 @@
+/* ========================================
+   VARIABLES — Design System de base
+   ======================================== */
+   :root {
+    --color-bg: #0f1226;
+    --color-bg-alt: #1a1e3a;
+    --color-surface: #232850;
+    --color-text: #f0f1f8;
+    --color-text-muted: #a0a4c0;
+    --color-primary: #6d4aff;
+    --color-primary-hover: #5838d4;
+    --color-accent-green: #2ecc71;
+    --color-accent-orange: #f39c12;
+    --color-accent-red: #e74c3c;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-pill: 999px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 20px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+  }
+  
+  /* ========================================
+     RESET — Minimal
+     ======================================== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  
+  /* ========================================
+     HEADER
+     ======================================== */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 18, 38, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(109, 74, 255, 0.15);
+  }
+  
+  .header__inner {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    min-height: 56px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+  
+  .logo__icon {
+    width: 32px;
+    height: 32px;
+    background: var(--color-primary);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  
+  .header__menu-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-size: 1.4rem;
+  }
+  
+  /* ========================================
+     HERO
+     ======================================== */
+  .hero {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+    text-align: center;
+  }
+  
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    background: rgba(46, 204, 113, 0.12);
+    color: var(--color-accent-green);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+  }
+  
+  .hero__badge::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: var(--color-accent-green);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  .hero__title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .hero__title span {
+    color: var(--color-primary);
+  }
+  
+  .hero__subtitle {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    width: 100%;
+    max-width: 340px;
+    min-height: 52px;
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+  }
+  
+  .hero__cta:hover,
+  .hero__cta:focus-visible {
+    background: var(--color-primary-hover);
+  }
+  
+  .hero__cta:active {
+    transform: scale(0.98);
+  }
+  
+  .hero__cta:focus-visible {
+    outline: 3px solid rgba(109, 74, 255, 0.4);
+    outline-offset: 2px;
+  }
+  
+  /* ========================================
+     TAGS — Scénarios cliquables
+     ======================================== */
+  .tags {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--space-md);
+  }
+  
+  .tags__label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    padding-left: var(--space-xs);
+  }
+  
+  .tags__scroll {
+    display: flex;
+    gap: var(--space-sm);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-xs) var(--space-xs) var(--space-sm);
+    scrollbar-width: none;
+  }
+  
+  .tags__scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 10px 16px;
+    background: var(--color-surface);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-pill);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    min-height: 44px;
+  }
+  
+  .tag:hover,
+  .tag:focus-visible {
+    border-color: var(--color-primary);
+    background: var(--color-bg-alt);
+  }
+  
+  .tag:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  .tag--danger {
+    border-color: rgba(231, 76, 60, 0.25);
+  }
+  
+  .tag--warning {
+    border-color: rgba(243, 156, 18, 0.25);
+  }
+  
+  /* ========================================
+     TABLETTE & DESKTOP — Adaptation
+     ======================================== */
+  @media (min-width: 768px) {
+    .header__inner,
+    .hero,
+    .tags {
+      max-width: 720px;
+    }
+  
+    .hero__title {
+      font-size: 2.4rem;
+    }
+  
+    .hero__subtitle {
+      font-size: 1.15rem;
+      max-width: 480px;
+    }
+  
+    .hero__cta {
+      width: auto;
+    }
+  
+    .tags__scroll {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+  }
