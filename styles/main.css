@@ -454,3 +454,91 @@
     gap: var(--space-md);
   }
 }
+
+/* ========================================
+   FOOTER
+   ======================================== */
+   .footer {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--space-lg) var(--space-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  
+  .footer__mission {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    max-width: 240px;
+  }
+  
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .footer__link {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .footer__link:hover,
+  .footer__link:focus-visible {
+    color: var(--color-primary);
+  }
+  
+  .footer__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+  
+  .footer__legal {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    opacity: 0.6;
+  }
+  
+  /* ========================================
+     TABLETTE & DESKTOP — Footer
+     ======================================== */
+  @media (min-width: 768px) {
+    .footer {
+      max-width: 720px;
+      padding: var(--space-xl) var(--space-md);
+    }
+  
+    .footer__inner {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  
+    .footer__brand {
+      max-width: 300px;
+    }
+  
+    .footer__links {
+      flex-direction: row;
+      gap: var(--space-lg);
+    }
+  }
