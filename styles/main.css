@@ -1,21 +1,36 @@
 /* ========================================
-   VARIABLES — Design System de base
+   VARIABLES — Design System Dark Tech Cyan
    ======================================== */
    :root {
-    --color-bg: #0f1226;
-    --color-bg-alt: #1a1e3a;
-    --color-surface: #232850;
-    --color-text: #f0f1f8;
-    --color-text-muted: #a0a4c0;
-    --color-primary: #6d4aff;
-    --color-primary-hover: #5838d4;
+    /* Couleurs principales - Fond noir profond */
+    --color-bg: #0a0a0a;
+    --color-bg-alt: #0f0f0f;
+    --color-surface: #1a1a1a;
+    
+    /* Textes */
+    --color-text: #ffffff;
+    --color-text-muted: #888888;
+    
+    /* Accent principal - Cyan électrique */
+    --color-primary: #00D4FF;
+    --color-primary-hover: #00B8DD;
+    
+    /* Accents de risque (maintenus) */
     --color-accent-green: #2ecc71;
     --color-accent-orange: #f39c12;
     --color-accent-red: #e74c3c;
+    
+    /* Rayures / Bordures */
+    --color-border: #333333;
+    --color-border-light: rgba(255, 255, 255, 0.08);
+    
+    /* Arrondis */
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
     --radius-pill: 999px;
+    
+    /* Espacements */
     --space-xs: 8px;
     --space-sm: 12px;
     --space-md: 20px;
@@ -52,10 +67,10 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(15, 18, 38, 0.85);
+    background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(109, 74, 255, 0.15);
+    border-bottom: 1px solid var(--color-border);
   }
   
   .header__inner {
@@ -89,6 +104,7 @@
     justify-content: center;
     font-size: 1.1rem;
     flex-shrink: 0;
+    color: #000;
   }
   
   .header__menu-btn {
@@ -118,8 +134,8 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-xs);
-    background: rgba(46, 204, 113, 0.12);
-    color: var(--color-accent-green);
+    background: rgba(0, 212, 255, 0.12);
+    color: var(--color-primary);
     padding: 6px 14px;
     border-radius: var(--radius-pill);
     font-size: 0.8rem;
@@ -131,7 +147,7 @@
     content: "";
     width: 8px;
     height: 8px;
-    background: var(--color-accent-green);
+    background: var(--color-primary);
     border-radius: 50%;
     animation: pulse 2s ease-in-out infinite;
   }
@@ -170,20 +186,22 @@
     width: 100%;
     max-width: 340px;
     min-height: 52px;
-    background: var(--color-primary);
-    color: #ffffff;
+    background: #ffffff;
+    color: #000000;
     font-size: 1.05rem;
-    font-weight: 600;
+    font-weight: 700;
     border: none;
     border-radius: var(--radius-pill);
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
     text-decoration: none;
   }
   
   .hero__cta:hover,
   .hero__cta:focus-visible {
-    background: var(--color-primary-hover);
+    background: var(--color-primary);
+    color: #000000;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
   }
   
   .hero__cta:active {
@@ -191,7 +209,7 @@
   }
   
   .hero__cta:focus-visible {
-    outline: 3px solid rgba(109, 74, 255, 0.4);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
   
@@ -205,9 +223,9 @@
   }
   
   .tags__label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     color: var(--color-text-muted);
     font-weight: 600;
     margin-bottom: var(--space-sm);
@@ -233,23 +251,24 @@
     align-items: center;
     gap: var(--space-xs);
     padding: 10px 16px;
-    background: var(--color-surface);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: transparent;
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
-    color: var(--color-text);
+    color: var(--color-text-muted);
     font-size: 0.9rem;
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
     scroll-snap-align: start;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
     min-height: 44px;
   }
   
   .tag:hover,
   .tag:focus-visible {
     border-color: var(--color-primary);
-    background: var(--color-bg-alt);
+    color: var(--color-primary);
+    background: rgba(0, 212, 255, 0.08);
   }
   
   .tag:focus-visible {
@@ -257,212 +276,176 @@
     outline-offset: 2px;
   }
   
+  /* État actif */
+  .tag--active {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  /* Variantes de couleur */
   .tag--danger {
-    border-color: rgba(231, 76, 60, 0.25);
+    border-color: rgba(231, 76, 60, 0.3);
   }
   
   .tag--warning {
-    border-color: rgba(243, 156, 18, 0.25);
+    border-color: rgba(243, 156, 18, 0.3);
   }
   
   /* ========================================
-     TABLETTE & DESKTOP — Adaptation
+     GUIDES — Section cartes micro-learning
      ======================================== */
-  @media (min-width: 768px) {
-    .header__inner,
-    .hero,
-    .tags {
-      max-width: 720px;
-    }
-  
-    .hero__title {
-      font-size: 2.4rem;
-    }
-  
-    .hero__subtitle {
-      font-size: 1.15rem;
-      max-width: 480px;
-    }
-  
-    .hero__cta {
-      width: auto;
-    }
-  
-    .tags__scroll {
-      flex-wrap: wrap;
-      overflow-x: visible;
-    }
-    
-  }
-  /* ========================================
-   GUIDES — Section cartes micro-learning
-   ======================================== */
-.guides {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: var(--space-md) var(--space-md) var(--space-lg);
-}
-
-.guides__title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--space-xs);
-}
-
-.guides__subtitle {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-md);
-}
-
-.guides__grid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-/* ========================================
-   CARD — Composant réutilisable
-   ======================================== */
-.card {
-  background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
-  transition: border-color 0.2s ease, transform 0.1s ease;
-}
-
-.card:active {
-  transform: scale(0.99);
-}
-
-/* Variante : risque élevé */
-.card--danger {
-  border-left: 3px solid var(--color-accent-red);
-}
-
-/* Variante : risque moyen */
-.card--warning {
-  border-left: 3px solid var(--color-accent-orange);
-}
-
-/* Variante : risque faible (pas de bordure colorée, juste la bordure par défaut) */
-
-/* --- Header de carte --- */
-.card__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--space-sm);
-}
-
-.card__icon {
-  font-size: 1.6rem;
-  line-height: 1;
-}
-
-.card__risk {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
-}
-
-.card__risk--danger {
-  background: rgba(231, 76, 60, 0.15);
-  color: var(--color-accent-red);
-}
-
-.card__risk--warning {
-  background: rgba(243, 156, 18, 0.15);
-  color: var(--color-accent-orange);
-}
-
-.card__risk--safe {
-  background: rgba(46, 204, 113, 0.15);
-  color: var(--color-accent-green);
-}
-
-/* --- Corps de carte --- */
-.card__title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  margin-bottom: var(--space-xs);
-}
-
-.card__desc {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  line-height: 1.4;
-  margin-bottom: var(--space-md);
-}
-
-/* --- Footer de carte --- */
-.card__footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.card__time {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-  font-weight: 500;
-}
-
-.card__link {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-}
-
-.card__link:hover,
-.card__link:focus-visible {
-  color: var(--color-primary-hover);
-}
-
-.card__link:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* ========================================
-   TABLETTE & DESKTOP — Cartes
-   ======================================== */
-@media (min-width: 768px) {
   .guides {
-    max-width: 720px;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--space-md) var(--space-md) var(--space-lg);
   }
-
+  
   .guides__title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-xs);
   }
-
+  
+  .guides__subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+  
   .guides__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-md);
   }
-}
-
-/* ========================================
-   FOOTER
-   ======================================== */
-   .footer {
+  
+  /* ========================================
+     CARD — Composant réutilisable
+     ======================================== */
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    transition: border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:active {
+    transform: scale(0.99);
+  }
+  
+  .card:hover {
+    border-color: var(--color-border);
+  }
+  
+  /* Variante : risque élevé */
+  .card--danger {
+    border-left: 3px solid var(--color-accent-red);
+  }
+  
+  /* Variante : risque moyen */
+  .card--warning {
+    border-left: 3px solid var(--color-accent-orange);
+  }
+  
+  /* --- Header de carte --- */
+  .card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .card__icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  
+  .card__risk {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-muted);
+  }
+  
+  .card__risk--danger {
+    background: rgba(231, 76, 60, 0.15);
+    color: var(--color-accent-red);
+  }
+  
+  .card__risk--warning {
+    background: rgba(243, 156, 18, 0.15);
+    color: var(--color-accent-orange);
+  }
+  
+  .card__risk--safe {
+    background: rgba(46, 204, 113, 0.15);
+    color: var(--color-accent-green);
+  }
+  
+  /* --- Corps de carte --- */
+  .card__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-xs);
+  }
+  
+  .card__desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+    margin-bottom: var(--space-md);
+  }
+  
+  /* --- Footer de carte --- */
+  .card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .card__time {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+  
+  .card__link {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .card__link:hover,
+  .card__link:focus-visible {
+    color: var(--color-primary-hover);
+  }
+  
+  .card__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+  
+  /* ========================================
+     FOOTER
+     ======================================== */
+  .footer {
     max-width: 480px;
     margin: 0 auto;
     padding: var(--space-lg) var(--space-md);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--color-border);
   }
   
   .footer__inner {
@@ -518,12 +501,43 @@
   }
   
   /* ========================================
-     TABLETTE & DESKTOP — Footer
+     TABLETTE & DESKTOP — Adaptations
      ======================================== */
   @media (min-width: 768px) {
+    .header__inner,
+    .hero,
+    .tags,
+    .guides,
     .footer {
       max-width: 720px;
-      padding: var(--space-xl) var(--space-md);
+    }
+  
+    .hero__title {
+      font-size: 2.4rem;
+    }
+  
+    .hero__subtitle {
+      font-size: 1.15rem;
+      max-width: 480px;
+    }
+  
+    .hero__cta {
+      width: auto;
+    }
+  
+    .tags__scroll {
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+  
+    .guides__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+    }
+  
+    .guides__title {
+      font-size: 1.8rem;
     }
   
     .footer__inner {
@@ -542,28 +556,3 @@
       gap: var(--space-lg);
     }
   }
-  /* ========================================
-   TAGS — État actif
-   ======================================== */
-.tag--active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #ffffff;
-}
-
-/* ========================================
-   CARTES — État filtré/hidden
-   ======================================== */
-.card.is-hidden {
-  display: none;
-}
-
-/* ========================================
-   MESSAGE VIDE
-   ======================================== */
-.guides__empty {
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  padding: var(--space-lg) var(--space-md);
-}
