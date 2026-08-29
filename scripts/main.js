@@ -1,11 +1,11 @@
-// ========================================
-// FILTRAGE DES CARTES PAR TAG
-// ========================================
-
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
     const tags = document.querySelectorAll('.tag');
     const cards = document.querySelectorAll('.card');
     const emptyMessage = document.querySelector('.guides__empty');
+  
+    console.log('CyberGuard JS loaded');
+    console.log('Tags trouvés:', tags.length);
+    console.log('Cartes trouvées:', cards.length);
   
     tags.forEach(function (tag) {
       tag.addEventListener('click', function () {
@@ -37,4 +37,4 @@
         }
       });
     });
-  })();
+  });
