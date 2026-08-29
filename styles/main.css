@@ -542,3 +542,28 @@
       gap: var(--space-lg);
     }
   }
+  /* ========================================
+   TAGS — État actif
+   ======================================== */
+.tag--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/* ========================================
+   CARTES — État filtré/hidden
+   ======================================== */
+.card.is-hidden {
+  display: none;
+}
+
+/* ========================================
+   MESSAGE VIDE
+   ======================================== */
+.guides__empty {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  padding: var(--space-lg) var(--space-md);
+}

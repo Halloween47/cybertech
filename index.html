@@ -42,100 +42,106 @@
     </a>
   </section>
 
-  <!-- ===================== TAGS SCÉNARIOS ===================== -->
-  <nav class="tags" aria-label="Recherche par scénario">
-    <p class="tags__label">Quel est votre problème ?</p>
- 
-    <div class="tags__scroll" role="list">
-      <button class="tag tag--danger" role="listitem" type="button">
-        📱 SMS frauduleux
-      </button>
-      <button class="tag tag--danger" role="listitem" type="button">
-        📧 Email suspect
-      </button>
-      <button class="tag tag--warning" role="listitem" type="button">
-        🔓 Mot de passe volé
-      </button>
-      <button class="tag" role="listitem" type="button">
-        📶 Wi-Fi public
-      </button>
-      <button class="tag tag--warning" role="listitem" type="button">
-        💳 Paiement bloqué
-      </button>
-      <button class="tag" role="listitem" type="button">
-        📲 App malveillante
-      </button>
-      <button class="tag" role="listitem" type="button">
-        🤕 Compte piraté
-      </button>
-    </div>
-  </nav>
-
-    <!-- ===================== CARTES MICRO-LEARNING ===================== -->
-    <section class="guides" id="guides" aria-label="Guides de prévention">
-        <h2 class="guides__title">Guides essentiels</h2>
-        <p class="guides__subtitle">Courts, clairs et directs. Choisissez un sujet.</p>
+    <!-- ===================== TAGS SCÉNARIOS ===================== -->
+    <nav class="tags" aria-label="Recherche par scénario">
+        <p class="tags__label">Quel est votre problème ?</p>
     
-        <div class="guides__grid">
-    
-          <!-- Carte 1 -->
-          <article class="card card--danger">
-            <div class="card__header">
-              <span class="card__icon" aria-hidden="true">📱</span>
-              <span class="card__risk card__risk--danger">Risque élevé</span>
-            </div>
-            <h3 class="card__title">Reconnaître un SMS frauduleux</h3>
-            <p class="card__desc">Les signes qui ne trompent pas : expéditeur, urgence, liens suspects.</p>
-            <div class="card__footer">
-              <span class="card__time">⏱ 2 min</span>
-              <a href="#" class="card__link">Lire le guide →</a>
-            </div>
-          </article>
-    
-          <!-- Carte 2 -->
-          <article class="card card--warning">
-            <div class="card__header">
-              <span class="card__icon" aria-hidden="true">🔓</span>
-              <span class="card__risk card__risk--warning">Risque moyen</span>
-            </div>
-            <h3 class="card__title">Créer un mot de passe incassable</h3>
-            <p class="card__desc">Longueur, phrases de passe, gestionnaire : la méthode complète.</p>
-            <div class="card__footer">
-              <span class="card__time">⏱ 3 min</span>
-              <a href="#" class="card__link">Lire le guide →</a>
-            </div>
-          </article>
-    
-          <!-- Carte 3 -->
-          <article class="card card--danger">
-            <div class="card__header">
-              <span class="card__icon" aria-hidden="true">📧</span>
-              <span class="card__risk card__risk--danger">Risque élevé</span>
-            </div>
-            <h3 class="card__title">Repérer un email de phishing</h3>
-            <p class="card__desc">Adresse expéditeur, formulaire caché, pièce jointe piégée.</p>
-            <div class="card__footer">
-              <span class="card__time">⏱ 2 min</span>
-              <a href="#" class="card__link">Lire le guide →</a>
-            </div>
-          </article>
-    
-          <!-- Carte 4 -->
-          <article class="card">
-            <div class="card__header">
-              <span class="card__icon" aria-hidden="true">📶</span>
-              <span class="card__risk card__risk--safe">Risque faible</span>
-            </div>
-            <h3 class="card__title">Se connecter en Wi-Fi public</h3>
-            <p class="card__desc">VPN,HTTPS, données sensibles : les bons réflexes.</p>
-            <div class="card__footer">
-              <span class="card__time">⏱ 2 min</span>
-              <a href="#" class="card__link">Lire le guide →</a>
-            </div>
-          </article>
-    
+        <div class="tags__scroll" role="list">
+          <button class="tag tag--active" role="listitem" type="button" data-category="all">
+            🎯 Tous
+          </button>
+          <button class="tag tag--danger" role="listitem" type="button" data-category="sms">
+            📱 SMS frauduleux
+          </button>
+          <button class="tag tag--danger" role="listitem" type="button" data-category="email">
+            📧 Email suspect
+          </button>
+          <button class="tag tag--warning" role="listitem" type="button" data-category="password">
+            🔓 Mot de passe volé
+          </button>
+          <button class="tag" role="listitem" type="button" data-category="wifi">
+            📶 Wi-Fi public
+          </button>
+          <button class="tag tag--warning" role="listitem" type="button" data-category="payment">
+            💳 Paiement bloqué
+          </button>
+          <button class="tag" role="listitem" type="button" data-category="app">
+            📲 App malveillante
+          </button>
+          <button class="tag" role="listitem" type="button" data-category="account">
+            🤕 Compte piraté
+          </button>
         </div>
-      </section>
+      </nav>
+
+      <!-- ===================== CARTES MICRO-LEARNING ===================== -->
+  <section class="guides" id="guides" aria-label="Guides de prévention">
+    <h2 class="guides__title">Guides essentiels</h2>
+    <p class="guides__subtitle">Courts, clairs et directs. Choisissez un sujet.</p>
+
+    <div class="guides__grid">
+
+      <!-- Carte 1 -->
+      <article class="card card--danger" data-category="sms">
+        <div class="card__header">
+          <span class="card__icon" aria-hidden="true">📱</span>
+          <span class="card__risk card__risk--danger">Risque élevé</span>
+        </div>
+        <h3 class="card__title">Reconnaître un SMS frauduleux</h3>
+        <p class="card__desc">Les signes qui ne trompent pas : expéditeur, urgence, liens suspects.</p>
+        <div class="card__footer">
+          <span class="card__time">⏱ 2 min</span>
+          <a href="#" class="card__link">Lire le guide →</a>
+        </div>
+      </article>
+
+      <!-- Carte 2 -->
+      <article class="card card--warning" data-category="password">
+        <div class="card__header">
+          <span class="card__icon" aria-hidden="true">🔓</span>
+          <span class="card__risk card__risk--warning">Risque moyen</span>
+        </div>
+        <h3 class="card__title">Créer un mot de passe incassable</h3>
+        <p class="card__desc">Longueur, phrases de passe, gestionnaire : la méthode complète.</p>
+        <div class="card__footer">
+          <span class="card__time">⏱ 3 min</span>
+          <a href="#" class="card__link">Lire le guide →</a>
+        </div>
+      </article>
+
+      <!-- Carte 3 -->
+      <article class="card card--danger" data-category="email">
+        <div class="card__header">
+          <span class="card__icon" aria-hidden="true">📧</span>
+          <span class="card__risk card__risk--danger">Risque élevé</span>
+        </div>
+        <h3 class="card__title">Repérer un email de phishing</h3>
+        <p class="card__desc">Adresse expéditeur, formulaire caché, pièce jointe piégée.</p>
+        <div class="card__footer">
+          <span class="card__time">⏱ 2 min</span>
+          <a href="#" class="card__link">Lire le guide →</a>
+        </div>
+      </article>
+
+      <!-- Carte 4 -->
+      <article class="card" data-category="wifi">
+        <div class="card__header">
+          <span class="card__icon" aria-hidden="true">📶</span>
+          <span class="card__risk card__risk--safe">Risque faible</span>
+        </div>
+        <h3 class="card__title">Se connecter en Wi-Fi public</h3>
+        <p class="card__desc">VPN, HTTPS, données sensibles : les bons réflexes.</p>
+        <div class="card__footer">
+          <span class="card__time">⏱ 2 min</span>
+          <a href="#" class="card__link">Lire le guide →</a>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Message quand aucune carte ne correspond -->
+    <p class="guides__empty" hidden>Aucun guide pour ce sujet pour l'instant.</p>
+  </section>
   <!-- ===================== FOOTER ===================== -->
   <footer class="footer" role="contentinfo">
     <div class="footer__inner">
@@ -162,5 +168,6 @@
 
     </div>
   </footer>
+  <script src="/scripts/main.js"></script>
 </body>
 </html>
