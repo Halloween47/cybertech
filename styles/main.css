@@ -216,81 +216,89 @@
   /* ========================================
      TAGS — Scénarios cliquables
      ======================================== */
-  .tags {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: var(--space-md);
-  }
-  
-  .tags__label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-text-muted);
-    font-weight: 600;
-    margin-bottom: var(--space-sm);
-    padding-left: var(--space-xs);
-  }
-  
-  .tags__scroll {
-    display: flex;
-    gap: var(--space-sm);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding: var(--space-xs) var(--space-xs) var(--space-sm);
-    scrollbar-width: none;
-  }
-  
-  .tags__scroll::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .tag {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: 10px 16px;
-    background: transparent;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
-    font-weight: 500;
-    white-space: nowrap;
-    cursor: pointer;
-    scroll-snap-align: start;
-    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
-    min-height: 44px;
-  }
-  
-  .tag:hover,
-  .tag:focus-visible {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    background: rgba(0, 212, 255, 0.08);
-  }
-  
-  .tag:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-  
-  /* État actif */
-  .tag--active {
-    background: rgba(0, 212, 255, 0.15);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-  }
-  
-  /* Variantes de couleur */
-  .tag--danger {
-    border-color: rgba(231, 76, 60, 0.3);
-  }
-  
-  .tag--warning {
-    border-color: rgba(243, 156, 18, 0.3);
-  }
+  /* ========================================
+   TAGS — Scénarios cliquables
+   ======================================== */
+.tags {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+.tags__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-xs);
+}
+
+.tags__scroll {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-xs) var(--space-xs) var(--space-sm);
+  scrollbar-width: none;
+}
+
+.tags__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  min-height: 44px;
+}
+
+.tag:hover,
+.tag:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.tag:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* VARIANTES DE COULEUR (AVANT actif) */
+.tag--danger {
+  border-color: rgba(231, 76, 60, 0.3);
+}
+
+.tag--warning {
+  border-color: rgba(243, 156, 18, 0.3);
+}
+
+/* ÉTAT ACTIF — DOIT VENIR APRÈS les variantes */
+.tag--active {
+  background: rgba(0, 212, 255, 0.15) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
+.tag--active:hover,
+.tag--active:focus-visible {
+  background: rgba(0, 212, 255, 0.2) !important;
+}
   
   /* ========================================
      GUIDES — Section cartes micro-learning
