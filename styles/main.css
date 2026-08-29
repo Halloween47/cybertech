@@ -346,6 +346,22 @@
   .card:hover {
     border-color: var(--color-border);
   }
+  /* ========================================
+   FILTRAGE — État caché
+   ======================================== */
+.card.is-hidden {
+  display: none;
+}
+
+/* ========================================
+   MESSAGE VIDE
+   ======================================== */
+.guides__empty {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  padding: var(--space-lg) var(--space-md);
+}
   
   /* Variante : risque élevé */
   .card--danger {
