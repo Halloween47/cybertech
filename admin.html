@@ -271,6 +271,24 @@
         </small>
       </div>
 
+      <div class="form-group">
+        <label class="form-label" for="category">Catégorie</label>
+        <select id="category" name="category" class="form-input">
+          <option value="">— Aucune catégorie —</option>
+          <option value="sms">📱 SMS frauduleux</option>
+          <option value="email">📧 Email suspect</option>
+          <option value="password">🔓 Mot de passe volé</option>
+          <option value="wifi">📶 Wi-Fi public</option>
+          <option value="payment">💳 Paiement bloqué</option>
+          <option value="app">📲 App malveillante</option>
+          <option value="account">🤕 Compte piraté</option>
+          <option value="general">🛡️ Sécurité générale</option>
+        </select>
+        <small style="color: var(--color-text-muted); font-size: 0.8rem; display: block; margin-top: var(--space-xs);">
+          Choisissez une catégorie existante. Plus tard, vous pourrez en créer de nouvelles.
+        </small>
+      </div>
+
       <button type="submit" class="form-submit">Publier</button>
     </form>
 
