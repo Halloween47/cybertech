@@ -110,98 +110,113 @@
 
   <!-- ===================== SCRIPT POUR CHARGEMENT DES CONTENUS ===================== -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script type="module">
-  const { fetchPublishedContent } = await import('/scripts/supabase-client.js');
-
-  const grid = document.getElementById('content-grid');
-
-  // const { data, error } = await fetchPublishedContent();
-
-  // if (error) {
-  //   grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
-  //   console.error('Erreur:', error);
-  // } else if (data.length === 0) {
-  //   grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
-  // } else {
-  //   grid.innerHTML = '';
-
-  //   data.forEach(item => {
-  //     const card = document.createElement('article');
-  //     card.className = 'card';
-
-  //     card.innerHTML = `
-  //       ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
-  //       <div class="card__header">
-  //         <span class="card__icon" aria-hidden="true">🛡️</span>
-  //         <span class="card__risk card__risk--safe">Sécurité</span>
-  //       </div>
-  //       <h3 class="card__title">${escapeHtml(item.title)}</h3>
-  //       <p class="card__desc">${escapeHtml(item.description)}</p>
-  //       <div class="card__footer">
-  //         <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
-  //         <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
-  //       </div>
-  //     `;
-  //     grid.appendChild(card);
-  //   });
-  // }
-
-  // function escapeHtml(text) {
-  //   const div = document.createElement('div');
-  //   div.textContent = text;
-  //   return div.innerHTML;
-  // }
-  const { data, error } = await fetchPublishedContent();
-
-if (error) {
-  grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
-  console.error('Erreur:', error);
-} else if (data.length === 0) {
-  grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
-} else {
-  grid.innerHTML = '';
-
-  // Mapping des catégories vers icônes, labels et classes CSS
-  const categoryMap = {
-    sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
-    email: { label: 'Email suspect', riskClass: 'card__risk--danger', icon: '📧' },
-    password: { label: 'Mot de passe', riskClass: 'card__risk--warning', icon: '🔓' },
-    wifi: { label: 'Wi-Fi public', riskClass: 'card__risk--safe', icon: '📶' },
-    payment: { label: 'Paiement', riskClass: 'card__risk--warning', icon: '💳' },
-    app: { label: 'App malveillante', riskClass: '', icon: '📲' },
-    account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
-    general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' }
-  };
-
-  data.forEach(item => {
-    const card = document.createElement('article');
-    card.className = 'card';
-
-    // Récupérer les infos de la catégorie, ou utiliser "general" par défaut
-    const catInfo = categoryMap[item.category] || categoryMap.general;
-
-    card.innerHTML = `
-      ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
-      <div class="card__header">
-        <span class="card__icon" aria-hidden="true">${catInfo.icon}</span>
-        <span class="card__risk ${catInfo.riskClass}">${catInfo.label}</span>
-      </div>
-      <h3 class="card__title">${escapeHtml(item.title)}</h3>
-      <p class="card__desc">${escapeHtml(item.description)}</p>
-      <div class="card__footer">
-        <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
-        <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-</script>
+  <script type="module">
+    import { fetchPublishedContent } from '/scripts/supabase-client.js';
+  
+    const grid = document.getElementById('content-grid');
+    const tags = document.querySelectorAll('.tag');
+  
+    // Mapping des catégories pour le rendu
+    const categoryMap = {
+      sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
+      email: { label: 'Email suspect', riskClass: 'card__risk--danger', icon: '📧' },
+      password: { label: 'Mot de passe', riskClass: 'card__risk--warning', icon: '🔓' },
+      wifi: { label: 'Wi-Fi public', riskClass: 'card__risk--safe', icon: '📶' },
+      payment: { label: 'Paiement', riskClass: 'card__risk--warning', icon: '💳' },
+      app: { label: 'App malveillante', riskClass: '', icon: '📲' },
+      account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
+      general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' }
+    };
+  
+    let allContents = [];
+  
+    // Fonction de rendu des cartes
+    function renderCards(contents) {
+      if (contents.length === 0) {
+        grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
+        return;
+      }
+  
+      grid.innerHTML = '';
+  
+      contents.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.dataset.category = item.category || 'general';
+  
+        const catInfo = categoryMap[item.category] || categoryMap.general;
+  
+        card.innerHTML = `
+          ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
+          <div class="card__header">
+            <span class="card__icon" aria-hidden="true">${catInfo.icon}</span>
+            <span class="card__risk ${catInfo.riskClass}">${catInfo.label}</span>
+          </div>
+          <h3 class="card__title">${escapeHtml(item.title)}</h3>
+          <p class="card__desc">${escapeHtml(item.description)}</p>
+          <div class="card__footer">
+            <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
+            <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  
+    // Fonction de filtrage
+    function filterContents(category) {
+      if (category === 'all') {
+        renderCards(allContents);
+      } else {
+        const filtered = allContents.filter(item => (item.category || 'general') === category);
+        renderCards(filtered);
+      }
+  
+      // Mise à jour visuelle des tags
+      tags.forEach(tag => {
+        if (tag.dataset.category === category) {
+          tag.classList.add('tag--active');
+        } else {
+          tag.classList.remove('tag--active');
+        }
+      });
+    }
+  
+    // Initialisation
+    async function init() {
+      try {
+        const { data, error } = await fetchPublishedContent();
+  
+        if (error) {
+          grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
+          console.error('Erreur:', error);
+          return;
+        }
+  
+        allContents = data;
+        renderCards(allContents);
+  
+        // Activation des listeners sur les tags
+        tags.forEach(tag => {
+          tag.addEventListener('click', () => {
+            const category = tag.dataset.category;
+            filterContents(category);
+          });
+        });
+  
+      } catch (err) {
+        console.error('Erreur:', err);
+        grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
+      }
+    }
+  
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  
+    init();
+  </script>
 </body>
 </html>
