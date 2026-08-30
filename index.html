@@ -115,42 +115,93 @@
 
   const grid = document.getElementById('content-grid');
 
+  // const { data, error } = await fetchPublishedContent();
+
+  // if (error) {
+  //   grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
+  //   console.error('Erreur:', error);
+  // } else if (data.length === 0) {
+  //   grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
+  // } else {
+  //   grid.innerHTML = '';
+
+  //   data.forEach(item => {
+  //     const card = document.createElement('article');
+  //     card.className = 'card';
+
+  //     card.innerHTML = `
+  //       ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
+  //       <div class="card__header">
+  //         <span class="card__icon" aria-hidden="true">🛡️</span>
+  //         <span class="card__risk card__risk--safe">Sécurité</span>
+  //       </div>
+  //       <h3 class="card__title">${escapeHtml(item.title)}</h3>
+  //       <p class="card__desc">${escapeHtml(item.description)}</p>
+  //       <div class="card__footer">
+  //         <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
+  //         <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
+  //       </div>
+  //     `;
+  //     grid.appendChild(card);
+  //   });
+  // }
+
+  // function escapeHtml(text) {
+  //   const div = document.createElement('div');
+  //   div.textContent = text;
+  //   return div.innerHTML;
+  // }
   const { data, error } = await fetchPublishedContent();
 
-  if (error) {
-    grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
-    console.error('Erreur:', error);
-  } else if (data.length === 0) {
-    grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
-  } else {
-    grid.innerHTML = '';
+if (error) {
+  grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
+  console.error('Erreur:', error);
+} else if (data.length === 0) {
+  grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
+} else {
+  grid.innerHTML = '';
 
-    data.forEach(item => {
-      const card = document.createElement('article');
-      card.className = 'card';
+  // Mapping des catégories vers icônes, labels et classes CSS
+  const categoryMap = {
+    sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
+    email: { label: 'Email suspect', riskClass: 'card__risk--danger', icon: '📧' },
+    password: { label: 'Mot de passe', riskClass: 'card__risk--warning', icon: '🔓' },
+    wifi: { label: 'Wi-Fi public', riskClass: 'card__risk--safe', icon: '📶' },
+    payment: { label: 'Paiement', riskClass: 'card__risk--warning', icon: '💳' },
+    app: { label: 'App malveillante', riskClass: '', icon: '📲' },
+    account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
+    general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' }
+  };
 
-      card.innerHTML = `
-        ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
-        <div class="card__header">
-          <span class="card__icon" aria-hidden="true">🛡️</span>
-          <span class="card__risk card__risk--safe">Sécurité</span>
-        </div>
-        <h3 class="card__title">${escapeHtml(item.title)}</h3>
-        <p class="card__desc">${escapeHtml(item.description)}</p>
-        <div class="card__footer">
-          <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
-          <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-  }
+  data.forEach(item => {
+    const card = document.createElement('article');
+    card.className = 'card';
 
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
+    // Récupérer les infos de la catégorie, ou utiliser "general" par défaut
+    const catInfo = categoryMap[item.category] || categoryMap.general;
+
+    card.innerHTML = `
+      ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
+      <div class="card__header">
+        <span class="card__icon" aria-hidden="true">${catInfo.icon}</span>
+        <span class="card__risk ${catInfo.riskClass}">${catInfo.label}</span>
+      </div>
+      <h3 class="card__title">${escapeHtml(item.title)}</h3>
+      <p class="card__desc">${escapeHtml(item.description)}</p>
+      <div class="card__footer">
+        <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
+        <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
 </script>
 </body>
 </html>
