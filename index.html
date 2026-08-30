@@ -109,58 +109,48 @@
   </footer>
 
   <!-- ===================== SCRIPT POUR CHARGEMENT DES CONTENUS ===================== -->
-  <script type="module">
-    import { fetchPublishedContent } from '/scripts/supabase-client.js';
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module">
+  const { fetchPublishedContent } = await import('/scripts/supabase-client.js');
 
-    const grid = document.getElementById('content-grid');
+  const grid = document.getElementById('content-grid');
 
-    async function loadContent() {
-      try {
-        const contents = await fetchPublishedContent();
+  const { data, error } = await fetchPublishedContent();
 
-        if (contents.length === 0) {
-          grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
-          return;
-        }
+  if (error) {
+    grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
+    console.error('Erreur:', error);
+  } else if (data.length === 0) {
+    grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
+  } else {
+    grid.innerHTML = '';
 
-        grid.innerHTML = '';
+    data.forEach(item => {
+      const card = document.createElement('article');
+      card.className = 'card';
 
-        contents.forEach(item => {
-          const card = document.createElement('article');
-          card.className = 'card';
-          card.dataset.category = item.category || 'general';
+      card.innerHTML = `
+        ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
+        <div class="card__header">
+          <span class="card__icon" aria-hidden="true">🛡️</span>
+          <span class="card__risk card__risk--safe">Sécurité</span>
+        </div>
+        <h3 class="card__title">${escapeHtml(item.title)}</h3>
+        <p class="card__desc">${escapeHtml(item.description)}</p>
+        <div class="card__footer">
+          <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
+          <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
 
-          card.innerHTML = `
-            ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
-            <div class="card__header">
-              <span class="card__icon" aria-hidden="true">🛡️</span>
-              <span class="card__risk card__risk--safe">Sécurité</span>
-            </div>
-            <h3 class="card__title">${escapeHtml(item.title)}</h3>
-            <p class="card__desc">${escapeHtml(item.description)}</p>
-            <div class="card__footer">
-              <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
-              <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">
-                En savoir plus →
-              </a>
-            </div>
-          `;
-
-          grid.appendChild(card);
-        });
-      } catch (error) {
-        console.error('Erreur:', error);
-        grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
-      }
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    loadContent();
-  </script>
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+</script>
 </body>
 </html>

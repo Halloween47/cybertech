@@ -1,76 +1,45 @@
+// // ========================================
+// // SUPABASE CLIENT
+// // ========================================
+
+// const SUPABASE_URL = 'https://mptvypkvdacwtvsszonw.supabase.co';
+// const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wdHZ5cGt2ZGFjd3R2c3N6b253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNjczOTQsImV4cCI6MjEwMzY0MzM5NH0.Y0qqTxL0dRPMMpytuLhpRzpPLUVgWPr_yz-uZrGwzjg';
+
+
 // ========================================
 // SUPABASE CLIENT
 // ========================================
 
-const SUPABASE_URL = 'https://mptvypkvdacwtvsszonw.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wdHZ5cGt2ZGFjd3R2c3N6b253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNjczOTQsImV4cCI6MjEwMzY0MzM5NH0.Y0qqTxL0dRPMMpytuLhpRzpPLUVgWPr_yz-uZrGwzjg';
+const SUPABASE_URL = 'COLLE_TON_PROJECT_URL_ICI';
+const SUPABASE_ANON_KEY = 'COLLE_TON_ANON_KEY_ICI';
 
-let supabaseInstance = null;
+let _client = null;
 
-async function initSupabase() {
-  if (supabaseInstance) return supabaseInstance;
-
-  const module = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
-  supabaseInstance = module.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  console.log('✅ Supabase initialized');
-  return supabaseInstance;
+function getClient() {
+  if (_client) return _client;
+  _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log('Supabase client prêt');
+  return _client;
 }
 
-export async function fetchPublishedContent() {
-  const client = await initSupabase();
-  const { data, error } = await client
-    .from('content')
+export function fetchPublishedContent() {
+  return getClient().from('content')
     .select('*')
     .eq('published', true)
     .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('❌ Erreur fetching:', error);
-    return [];
-  }
-
-  console.log('✅ Found', data.length, 'contenus');
-  return data;
 }
 
-export async function addContent(content) {
-  const client = await initSupabase();
-  const { data, error } = await client.from('content').insert([content]).select();
-
-  if (error) {
-    console.error('❌ Erreur ajout:', error);
-    return null;
-  }
-
-  console.log('✅ Contenu ajouté:', data[0]);
-  return data[0];
-}
-
-export async function deleteContent(id) {
-  const client = await initSupabase();
-  const { error } = await client.from('content').delete().eq('id', id);
-
-  if (error) {
-    console.error('❌ Erreur suppression:', error);
-    return false;
-  }
-
-  console.log('✅ Contenu supprimé:', id);
-  return true;
-  
-}
-export async function fetchAllContent() {
-  const client = await initSupabase();
-  const { data, error } = await client
-    .from('content')
+export function fetchAllContent() {
+  return getClient().from('content')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(50);
+}
 
-  if (error) {
-    console.error('❌ Erreur fetching all:', error);
-    return [];
-  }
+export function addContent(content) {
+  return getClient().from('content').insert([content]).select();
+}
 
-  return data;
+export function deleteContent(id) {
+  return getClient().from('content').delete().eq('id', id);
 }
