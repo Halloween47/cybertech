@@ -596,3 +596,37 @@
     color: var(--color-text-muted);
     padding: var(--space-lg);
   }
+  /* ========================================
+   BANDEAU D'INFO (ANNOUNCEMENT BAR)
+   ======================================== */
+.announcement-bar {
+  background: var(--color-primary); /* Fond violet cyan */
+  color: #000000; /* Texte noir pour contraste fort */
+  padding: var(--space-xs) 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  z-index: 101; /* Au-dessus du header */
+  position: relative;
+}
+
+.announcement-bar__inner {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-md);
+}
+
+.announcement-bar__icon {
+  font-size: 1rem;
+}
+
+/* Responsive Desktop */
+@media (min-width: 768px) {
+  .announcement-bar__inner {
+    max-width: 720px;
+  }
+}
