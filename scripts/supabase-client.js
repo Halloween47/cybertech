@@ -57,4 +57,20 @@ export async function deleteContent(id) {
 
   console.log('✅ Contenu supprimé:', id);
   return true;
+  
+}
+export async function fetchAllContent() {
+  const client = await initSupabase();
+  const { data, error } = await client
+    .from('content')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (error) {
+    console.error('❌ Erreur fetching all:', error);
+    return [];
+  }
+
+  return data;
 }
