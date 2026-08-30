@@ -28,24 +28,34 @@
     </div>
   </header>
 
-  <!-- ===================== HERO ===================== -->
-  <section class="hero" role="region" aria-label="Section principale">
-    <span class="hero__badge">Service actif · Mises à jour quotidiennes</span>
-
-    <h1 class="hero__title">
-      Un SMS suspect ?<br />
-      <span>Vérifiez-le en 2 minutes.</span>
-    </h1>
-
-    <p class="hero__subtitle">
-      Guides simples et rapides pour reconnaître les arnaques, sécuriser votre
-      téléphone et réagir en cas de tentative de hameçonnage.
-    </p>
-
-    <a href="#guides" class="hero__cta">
-      Voir les 5 règles d'or 🔒
-    </a>
-  </section>
+    <!-- ===================== HERO DYNAMIQUE ===================== -->
+    <section class="hero" role="region" aria-label="Section principale">
+      <!-- Badge de date -->
+      <span class="hero__badge" id="last-update-badge">Chargement...</span>
+  
+      <!-- Titre dynamique -->
+      <h1 class="hero__title" id="hero-title">
+        Chargement du titre...
+      </h1>
+  
+      <!-- Sous-titre dynamique -->
+      <p class="hero__subtitle" id="hero-subtitle">
+        Chargement de la description...
+      </p>
+  
+      <!-- CTA dynamique -->
+      <div class="hero__cta-container">
+        <a href="#" class="hero__cta" id="hero-cta">
+          Chargement...
+        </a>
+      </div>
+  
+      <!-- Aperçu des derniers guides (optionnel, on le garde pour plus tard) -->
+      <div class="hero__preview" id="hero-preview" style="display: none;">
+        <p class="hero__preview-title">Dernières ressources ajoutées :</p>
+        <div class="hero__preview-list" id="hero-preview-list"></div>
+      </div>
+    </section>
 
   <!-- ===================== TAGS SCÉNARIOS ===================== -->
   <nav class="tags" aria-label="Recherche par scénario">
@@ -123,8 +133,13 @@
   
     const grid = document.getElementById('content-grid');
     const tags = document.querySelectorAll('.tag');
+    const lastUpdateBadge = document.querySelector('#last-update-badge');
+    
+    // Éléments du Hero
+    const heroTitle = document.getElementById('hero-title');
+    const heroSubtitle = document.getElementById('hero-subtitle');
+    const heroCta = document.getElementById('hero-cta');
   
-    // Mapping des catégories pour le rendu
     const categoryMap = {
       sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
       email: { label: 'Email suspect', riskClass: 'card__risk--danger', icon: '📧' },
@@ -138,7 +153,27 @@
   
     let allContents = [];
   
-    // Fonction de rendu des cartes
+    // Fonction pour mettre à jour le Hero avec le contenu le plus récent
+    function updateHero(contents) {
+      if (!heroTitle || !heroSubtitle || !heroCta || contents.length === 0) return;
+  
+      const latest = contents[0]; // Le plus récent
+      const catInfo = categoryMap[latest.category] || categoryMap.general;
+  
+      // Titre : On utilise le titre du contenu, ou un texte générique si vide
+      heroTitle.innerHTML = escapeHtml(latest.title) || "Bienvenue sur CyberGuard";
+  
+      // Sous-titre : On utilise la description du contenu
+      heroSubtitle.innerHTML = escapeHtml(latest.description) || "Des guides simples et rapides pour votre sécurité.";
+  
+      // CTA : On utilise l'URL cible du contenu
+      heroCta.href = latest.target_url || "#guides";
+      heroCta.textContent = "En savoir plus →";
+  
+      // Optionnel : on pourrait changer l'icône du Hero selon la catégorie
+      // heroTitle.innerHTML = `${catInfo.icon} ${heroTitle.innerHTML}`;
+    }
+  
     function renderCards(contents) {
       if (contents.length === 0) {
         grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
@@ -171,7 +206,18 @@
       });
     }
   
-    // Fonction de filtrage
+    function updateLastUpdateBadge() {
+      if (!lastUpdateBadge || allContents.length === 0) return;
+  
+      const latest = allContents[0]; 
+      const dateObj = new Date(latest.created_at);
+      
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const formattedDate = dateObj.toLocaleDateString('fr-FR', options);
+  
+      lastUpdateBadge.innerHTML = `🟢 Dernière mise à jour : ${formattedDate}`;
+    }
+  
     function filterContents(category) {
       if (category === 'all') {
         renderCards(allContents);
@@ -180,7 +226,6 @@
         renderCards(filtered);
       }
   
-      // Mise à jour visuelle des tags
       tags.forEach(tag => {
         if (tag.dataset.category === category) {
           tag.classList.add('tag--active');
@@ -190,7 +235,6 @@
       });
     }
   
-    // Initialisation
     async function init() {
       try {
         const { data, error } = await fetchPublishedContent();
@@ -202,9 +246,17 @@
         }
   
         allContents = data;
+        
+        // 1. Mettre à jour le Hero avec le contenu le plus récent
+        updateHero(allContents);
+  
+        // 2. Mettre à jour le badge de date
+        updateLastUpdateBadge();
+  
+        // 3. Afficher toutes les cartes
         renderCards(allContents);
   
-        // Activation des listeners sur les tags
+        // 4. Activer les listeners sur les tags
         tags.forEach(tag => {
           tag.addEventListener('click', () => {
             const category = tag.dataset.category;

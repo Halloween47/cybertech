@@ -665,3 +665,106 @@
       max-width: 720px;
     }
   }
+  /* ========================================
+   HERO — Style dynamique
+   ======================================== */
+.hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  max-width: 340px;
+  min-height: 52px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.hero__cta:hover,
+.hero__cta:focus-visible {
+  background: var(--color-primary);
+  color: #000000;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  transform: scale(1.02);
+}
+
+.hero__cta:active {
+  transform: scale(0.98);
+}
+
+.hero__cta:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.hero__cta-container {
+  margin: var(--space-lg) 0;
+}
+
+.hero__preview {
+  margin-top: var(--space-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: none; /* Caché par défaut, on l'affichera plus tard */
+}
+
+.hero__preview-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+
+.hero__preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.hero__preview-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.hero__preview-item:hover {
+  background: var(--color-bg-alt);
+}
+
+.hero__preview-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.hero__preview-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.hero__preview-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
