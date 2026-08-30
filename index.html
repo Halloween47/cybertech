@@ -153,27 +153,29 @@
   
     let allContents = [];
   
-    // Fonction pour mettre à jour le Hero avec le contenu le plus récent
-    function updateHero(contents) {
-      if (!heroTitle || !heroSubtitle || !heroCta || contents.length === 0) return;
-  
-      const latest = contents[0]; // Le plus récent
-      const catInfo = categoryMap[latest.category] || categoryMap.general;
-  
-      // Titre : On utilise le titre du contenu, ou un texte générique si vide
-      heroTitle.innerHTML = escapeHtml(latest.title) || "Bienvenue sur CyberGuard";
-  
-      // Sous-titre : On utilise la description du contenu
-      heroSubtitle.innerHTML = escapeHtml(latest.description) || "Des guides simples et rapides pour votre sécurité.";
-  
-      // CTA : On utilise l'URL cible du contenu
-      heroCta.href = latest.target_url || "#guides";
-      heroCta.textContent = "En savoir plus →";
-  
-      // Optionnel : on pourrait changer l'icône du Hero selon la catégorie
-      // heroTitle.innerHTML = `${catInfo.icon} ${heroTitle.innerHTML}`;
-    }
-  
+      // Fonction pour mettre à jour le Hero avec un contenu ALÉATOIRE
+  function updateHero(contents) {
+    if (!heroTitle || !heroSubtitle || !heroCta || contents.length === 0) return;
+
+    // Choisir un contenu au hasard
+    const randomIndex = Math.floor(Math.random() * contents.length);
+    const selected = contents[randomIndex]; 
+    
+    const catInfo = categoryMap[selected.category] || categoryMap.general;
+
+    // Titre : On utilise le titre du contenu
+    heroTitle.innerHTML = escapeHtml(selected.title) || "Bienvenue sur CyberGuard";
+
+    // Sous-titre : On utilise la description du contenu
+    heroSubtitle.innerHTML = escapeHtml(selected.description) || "Des guides simples et rapides pour votre sécurité.";
+
+    // CTA : On utilise l'URL cible du contenu
+    heroCta.href = selected.target_url || "#guides";
+    heroCta.textContent = "En savoir plus →";
+    
+    // Optionnel : on pourrait changer l'icône du Hero selon la catégorie
+    // heroTitle.innerHTML = `${catInfo.icon} ${heroTitle.innerHTML}`;
+  }
     function renderCards(contents) {
       if (contents.length === 0) {
         grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
