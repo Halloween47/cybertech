@@ -98,7 +98,18 @@
       </div>
 
       <button type="submit" class="form-submit">Se connecter</button>
-      <p class="error-message" id="error-msg">Email ou mot de passe incorrect.</p>
+      <!-- <p class="error-message" id="error-msg">Email ou mot de passe incorrect.</p> -->      
+      <!-- Message d'erreur + Image humoristique -->
+      <div class="error-container" id="error-container" style="display: none; text-align: center; margin-top: var(--space-md);">
+        <p class="error-message" id="error-msg" style="margin-bottom: var(--space-sm);">Email ou mot de passe incorrect.</p>
+        <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=300&q=80" 
+             alt="Chat triste" 
+             class="error-image" 
+             style="max-width: 200px; border-radius: var(--radius-md); margin: 0 auto;" />
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: var(--space-xs);">
+          Oups ! Même les chats savent se connecter...
+        </p>
+      </div>
     </form>
 
     <p style="margin-top: var(--space-lg); font-size: 0.85rem; color: var(--color-text-muted);">
@@ -134,11 +145,19 @@
         password
       });
 
-      if (error) {
+      // if (error) {
+      //   console.error('Erreur de connexion:', error);
+      //   errorMsg.textContent = 'Erreur : ' + error.message;
+      //   errorMsg.classList.add('visible');
+      // } 
+            if (error) {
         console.error('Erreur de connexion:', error);
         errorMsg.textContent = 'Erreur : ' + error.message;
-        errorMsg.classList.add('visible');
-      } else {
+        
+        // Affiche le conteneur complet (message + image)
+        document.getElementById('error-container').style.display = 'block';
+      }
+      else {
         console.log('Connexion réussie ! Session:', data.session);
         // Petite attente pour être sûr que la session est écrite
         setTimeout(() => {
