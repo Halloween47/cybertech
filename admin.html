@@ -307,27 +307,35 @@
       <p style="color: var(--color-text-muted); text-align: center; padding: var(--space-lg);">Chargement...</p>
     </div>
   </main>
-
-  
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="module">
-  // ========================================
-// VÉRIFICATION DE CONNEXION
-// ========================================
-(async () => {
-  const { data: { session } } = await supabase.auth.getSession();
+  // 1. INITIALISATION DE SUPABASE (CRITIQUE : doit être AVANT la vérification)
+  const SUPABASE_URL = 'https://mptvypkvdacwtvsszonw.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wdHZ5cGt2ZGFjd3R2c3N6b253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNjczOTQsImV4cCI6MjEwMzY0MzM5NH0.Y0qqTxL0dRPMMpytuLhpRzpPLUVgWPr_yz-uZrGwzjg'; 
+  
+  // Création du client
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log('✅ Client Supabase initialisé');
 
-  if (!session) {
-    // Pas connecté : rediriger vers login.html
-    window.location.href = '/login.html';
-    return;
-  }
+  // 2. VÉRIFICATION DE CONNEXION (Maintenant que supabase existe)
+  (async () => {
+    const { data: { session } } = await supabase.auth.getSession();
 
-  console.log('Utilisateur connecté:', session.user.email);
-})();
+    if (!session) {
+      console.warn('⚠️ Utilisateur non connecté. Redirection...');
+      window.location.href = '/login.html';
+      return; // STOP ici, rien d'autre ne s'exécute
+    }
 
+    console.log('✅ Utilisateur connecté:', session.user.email);
+  })();
+
+  // 3. IMPORTATION DES FONCTIONS (Après la vérification)
+  // Note: Si supabase-client.js utilise aussi window.supabase, ça marchera car on a initialisé plus haut.
+  // Sinon, on peut importer directement.
   const { addContent, deleteContent, fetchAllContent } = await import('/scripts/supabase-client.js');
 
+  // 4. SÉLECTION DES ÉLÉMENTS DU DOM
   const form = document.getElementById('content-form');
   const successMsg = document.getElementById('success-msg');
   const adminList = document.getElementById('admin-list');
@@ -338,50 +346,36 @@
   const imageInput = document.getElementById('image_url');
   const imagePreview = document.getElementById('image-preview');
 
+  // ... (Le reste de ton code : auto-fill, submit, loadAdminList, etc.) ...
+  // Je ne le répète pas tout pour gagner de la place, mais il doit rester exactement comme avant, 
+  // juste DÉPLACÉ APRÈS le bloc de vérification.
+
   // ========================================
   // AUTO-REMPLISSAGE VIA MICROLINK API
   // ========================================
   autofillBtn.addEventListener('click', async () => {
+    // ... (Ton code existant) ...
     const url = urlInput.value.trim();
-
-    if (!url) {
-      alert('Collez une URL d\'abord.');
-      return;
-    }
-
-    try { new URL(url); } catch {
-      alert('URL invalide. Ex: https://haveibeenpwned.com/');
-      return;
-    }
-
+    if (!url) { alert('Collez une URL d\'abord.'); return; }
+    try { new URL(url); } catch { alert('URL invalide.'); return; }
+    
     autofillBtn.disabled = true;
     autofillBtn.textContent = '⏳ Extraction...';
 
     try {
       const res = await fetch('https://api.microlink.io/?url=' + encodeURIComponent(url));
       const data = await res.json();
-
-      console.log('Microlink:', data);
-
-      if (data.status !== 'success') {
-        throw new Error(data.message || 'Extraction échouée');
-      }
-
+      if (data.status !== 'success') throw new Error(data.message || 'Extraction échouée');
+      
       const meta = data.data;
       if (meta.title) titleInput.value = meta.title;
       if (meta.description) descInput.value = meta.description.substring(0, 180);
-
       const img = (meta.image && meta.image.url) || (meta.logo && meta.logo.url);
-      if (img) {
-        imageInput.value = img;
-        imagePreview.src = img;
-        imagePreview.classList.add('visible');
-      }
-
+      if (img) { imageInput.value = img; imagePreview.src = img; imagePreview.classList.add('visible'); }
+      
       successMsg.textContent = '✅ Métadonnées extraites !';
       successMsg.classList.add('visible');
       setTimeout(() => successMsg.classList.remove('visible'), 3000);
-
     } catch (err) {
       console.error('Erreur extraction:', err);
       alert('Extraction impossible. Remplissez manuellement.');
@@ -408,7 +402,6 @@
   // ========================================
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const fd = new FormData(form);
     const content = {
       title: fd.get('title').trim(),
@@ -426,13 +419,11 @@
     try {
       const { error } = await addContent(content);
       if (error) throw error;
-
       successMsg.textContent = '✅ Contenu publié !';
       successMsg.classList.add('visible');
       form.reset();
       imagePreview.classList.remove('visible');
       setTimeout(() => successMsg.classList.remove('visible'), 3000);
-
       loadAdminList();
     } catch (err) {
       alert('Erreur : ' + err.message);
@@ -448,19 +439,15 @@
   async function loadAdminList() {
     try {
       const { data, error } = await fetchAllContent();
-
       if (error) {
         adminList.innerHTML = '<p style="color:var(--color-accent-red);text-align:center;padding:var(--space-lg);">Erreur: ' + error.message + '</p>';
         return;
       }
-
       if (!data || data.length === 0) {
         adminList.innerHTML = '<p style="color:var(--color-text-muted);text-align:center;padding:var(--space-lg);">Aucun contenu.</p>';
         return;
       }
-
       adminList.innerHTML = '';
-
       data.forEach(item => {
         const div = document.createElement('div');
         div.className = 'admin-item';
@@ -496,6 +483,7 @@
     return div.innerHTML;
   }
 
+  // Initialisation
   loadAdminList();
 </script>
 </body>
