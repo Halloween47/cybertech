@@ -106,12 +106,17 @@
     </p>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://mptvypkvdacwtvsszonw.supabase.co'; // Remplace par ta vraie URL
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wdHZ5cGt2ZGFjd3R2c3N6b253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNjczOTQsImV4cCI6MjEwMzY0MzM5NH0.Y0qqTxL0dRPMMpytuLhpRzpPLUVgWPr_yz-uZrGwzjg'; // Remplace par ta vraie clé
-
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // On utilise directement la variable globale 'supabase' créée par le script CDN
+    // Pas besoin de 'const supabase = ...' ni de 'window.supabase.createClient' ici si le CDN l'a déjà fait.
+    // Mais pour être sûr d'avoir le bon client, on peut faire ceci :
+    
+    const SUPABASE_URL = 'https://mptvypkvdacwtvsszonw.supabase.com'; // REMPLACE PAR TA VRAIE URL
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wdHZ5cGt2ZGFjd3R2c3N6b253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNjczOTQsImV4cCI6MjEwMzY0MzM5NH0.Y0qqTxL0dRPMMpytuLhpRzpPLUVgWPr_yz-uZrGwzjg'; // REMPLACE PAR TA VRAIE CLÉ
+    
+    // Création du client explicitement pour éviter les conflits
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('login-form');
     const errorMsg = document.getElementById('error-msg');
@@ -122,17 +127,23 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log('Tentative de connexion pour:', email);
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
         email,
         password
       });
 
       if (error) {
-        errorMsg.textContent = error.message;
+        console.error('Erreur de connexion:', error);
+        errorMsg.textContent = 'Erreur : ' + error.message;
         errorMsg.classList.add('visible');
       } else {
-        // Succès : rediriger vers admin.html
-        window.location.href = '/admin.html';
+        console.log('Connexion réussie ! Session:', data.session);
+        // Petite attente pour être sûr que la session est écrite
+        setTimeout(() => {
+          window.location.href = '/admin.html';
+        }, 500);
       }
     });
   </script>
