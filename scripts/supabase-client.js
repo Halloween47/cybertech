@@ -2,7 +2,7 @@
 // SUPABASE CLIENT
 // ========================================
 
-const SUPABASE_URL = 'https://mptvypkvdacwtvsszonw.supabase.com';
+const SUPABASE_URL = 'https://mptvypkvdacwtvsszonw.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1wdHZ5cGt2ZGFjd3R2c3N6b253Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNjczOTQsImV4cCI6MjEwMzY0MzM5NH0.Y0qqTxL0dRPMMpytuLhpRzpPLUVgWPr_yz-uZrGwzjg';
 
 let _client = null;
