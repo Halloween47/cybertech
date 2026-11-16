@@ -125,7 +125,7 @@
     const heroTitle = document.getElementById('hero-title');
     const heroSubtitle = document.getElementById('hero-subtitle');
     const heroCta = document.getElementById('hero-cta');
-
+    const heroSection = document.querySelector('.hero');
     const rowsContainer = document.getElementById('rows-container');
     let allCategories = [];   // liste ordonnée des catégories chargées
   
@@ -199,7 +199,15 @@
     // CTA : On utilise l'URL cible du contenu
     heroCta.href = selected.target_url || "#guides";
     heroCta.textContent = "En savoir plus →";
-    
+        // Fond image façon Netflix : image du contenu + dégradé noir pour garder le texte lisible
+    if (selected.image_url) {
+      heroSection.style.backgroundImage =
+        `linear-gradient(to top, rgba(10, 10, 10, 0.95) 15%, rgba(10, 10, 10, 0.6) 60%, rgba(10, 10, 10, 0.35) 100%), url("${escapeHtml(selected.image_url)}")`;
+      heroSection.style.backgroundSize = 'cover';
+      heroSection.style.backgroundPosition = 'center';
+    } else {
+      heroSection.style.backgroundImage = 'none';
+    }
     // Optionnel : on pourrait changer l'icône du Hero selon la catégorie
     // heroTitle.innerHTML = `${catInfo.icon} ${heroTitle.innerHTML}`;
   }
