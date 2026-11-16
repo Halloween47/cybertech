@@ -158,6 +158,22 @@
     const heroSubtitle = document.getElementById('hero-subtitle');
     const heroCta = document.getElementById('hero-cta');
   
+    // const categoryMap = {
+    //   sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
+    //   email: { label: 'Email suspect', riskClass: 'card__risk--danger', icon: '📧' },
+    //   password: { label: 'Mot de passe', riskClass: 'card__risk--warning', icon: '🔓' },
+    //   wifi: { label: 'Wi-Fi public', riskClass: 'card__risk--safe', icon: '📶' },
+    //   payment: { label: 'Paiement', riskClass: 'card__risk--warning', icon: '💳' },
+    //   app: { label: 'App malveillante', riskClass: '', icon: '📲' },
+    //   account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
+    //   general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' },
+    //   games:   { label: 'Jeux', riskClass: 'card__risk--safe', icon: "🎮" },
+    //   radar:   { icon: "📡", color: "warning" },
+    //   tools:   { icon: "🧰", color: "safe"    },
+    //   misc:    { icon: "🎲", color: "default" },
+    //   infos:   { icon: "ℹ️", color: "safe"    },
+    //   deals:   { icon: "🏷️", color: "warning" },
+    // };
     const categoryMap = {
       sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
       email: { label: 'Email suspect', riskClass: 'card__risk--danger', icon: '📧' },
@@ -167,12 +183,12 @@
       app: { label: 'App malveillante', riskClass: '', icon: '📲' },
       account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
       general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' },
-      games:   { label: 'Jeux', riskClass: 'card__risk--safe', icon: "🎮" },
-      radar:   { icon: "📡", color: "warning" },
-      tools:   { icon: "🧰", color: "safe"    },
-      misc:    { icon: "🎲", color: "default" },
-      infos:   { icon: "ℹ️", color: "safe"    },
-      deals:   { icon: "🏷️", color: "warning" },
+      games: { label: 'Jeux', riskClass: 'card__risk--safe', icon: '🎮' },
+      radar: { label: 'Radar menaces', riskClass: 'card__risk--warning', icon: '📡' },
+      tools: { label: 'Outils', riskClass: 'card__risk--safe', icon: '🧰' },
+      misc: { label: 'Divers', riskClass: '', icon: '🎲' },
+      infos: { label: 'Infos', riskClass: 'card__risk--safe', icon: 'ℹ️' },
+      deals: { label: 'Bon plan', riskClass: 'card__risk--warning', icon: '🏷️' },
     };
   
     let allContents = [];
