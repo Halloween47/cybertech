@@ -28,8 +28,10 @@
     </div>
   </header>
 
-    <!-- ===================== HERO DYNAMIQUE ===================== -->
-    <span class="hero__badge" id="last-update-badge">Chargement...</span>
+        <!-- ===================== HERO DYNAMIQUE ===================== -->
+    <div class="badge-band">
+      <span class="hero__badge" id="last-update-badge">Chargement...</span>
+    </div>
     <section class="hero" role="region" aria-label="Section principale">
       <!-- Badge de date -->
   
@@ -199,9 +201,9 @@
     heroCta.href = selected.target_url || "#guides";
     heroCta.textContent = "En savoir plus →";
         // Fond image façon Netflix : image du contenu + dégradé noir pour garder le texte lisible
-    if (selected.image_url) {
+        if (selected.image_url) {
       heroSection.style.backgroundImage =
-        `linear-gradient(to top, rgba(10, 10, 10, 0.95) 15%, rgba(10, 10, 10, 0.6) 60%, rgba(10, 10, 10, 0.35) 100%), url("${escapeHtml(selected.image_url)}")`;
+        `linear-gradient(to top, rgba(10, 10, 10, 0.98) 30%, rgba(10, 10, 10, 0.85) 65%, rgba(10, 10, 10, 0.6) 100%), url("${escapeHtml(selected.image_url)}")`;
       heroSection.style.backgroundSize = 'cover';
       heroSection.style.backgroundPosition = 'center';
     } else {

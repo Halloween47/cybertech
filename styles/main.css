@@ -214,10 +214,18 @@
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
-  
-  /* ========================================
-     TAGS — Scénarios cliquables
-     ======================================== */
+  /* Bande du badge "dernière mise à jour" : centrée, respirante */
+.badge-band {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-md) var(--space-xs);
+  text-align: center;
+}
+
+.badge-band .hero__badge {
+  display: inline-flex; /* centré par le text-align du parent */
+  margin: 0;
+}
   /* ========================================
    TAGS — Scénarios cliquables
    ======================================== */
