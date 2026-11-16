@@ -339,6 +339,24 @@
   // Mode édition : contient l'ID du contenu en cours de modification, ou null
   let editingId = null;
 
+    // Libellés des catégories (pour l'affichage dans la liste admin)
+  const categoryMap = {
+    sms:     { label: '📱 SMS frauduleux' },
+    email:   { label: '📧 Email suspect' },
+    password:{ label: '🔓 Mot de passe' },
+    wifi:    { label: '📶 Wi-Fi public' },
+    payment: { label: '💳 Paiement' },
+    app:     { label: '📲 App malveillante' },
+    account: { label: '🤕 Compte piraté' },
+    general: { label: '🛡️ Sécurité' },
+    games:   { label: '🎮 Jeux' },
+    radar:   { label: '📡 Radar menaces' },
+    tools:   { label: '🧰 Outils' },
+    misc:    { label: '🎲 Divers' },
+    infos:   { label: 'ℹ️ Infos' },
+    deals:   { label: '🏷️ Bon plan' },
+  };
+
   // 3. IMPORTATION DES FONCTIONS (Après la vérification)
   // Note: Si supabase-client.js utilise aussi window.supabase, ça marchera car on a initialisé plus haut.
   // Sinon, on peut importer directement.
@@ -465,6 +483,7 @@
           <div class="admin-item__content">
             <div class="admin-item__title">${escapeHtml(item.title)}</div>
             <div class="admin-item__meta">${new Date(item.created_at).toLocaleDateString('fr-FR')}</div>
+            <span class="admin-item__tag">${item.category && categoryMap[item.category] ? categoryMap[item.category].label : '⚪ Non catégorisé'}</span>
             <div class="admin-item__actions">
               <a href="${escapeHtml(item.target_url)}" target="_blank" rel="noopener noreferrer" class="admin-item__btn admin-item__btn--edit">Ouvrir</a>
               <button onclick="handleEdit(${item.id})" class="admin-item__btn admin-item__btn--edit">✏️ Modifier</button>
@@ -486,7 +505,7 @@
     if (error) { alert('Erreur: ' + error.message); return; }
     loadAdminList();
   };
-  
+
   // ========================================
   // MODE ÉDITION
   // ========================================

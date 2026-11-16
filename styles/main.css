@@ -803,3 +803,13 @@
   color: var(--color-text-muted);
   flex-shrink: 0;
 }
+
+.admin-item__tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  margin: var(--space-xs) 0;
+}
