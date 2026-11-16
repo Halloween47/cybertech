@@ -281,15 +281,15 @@
 
       <div class="form-group">
         <label class="form-label" for="category">Catégorie</label>
-        <select id="category" name="category" class="form-input">
+        <!-- <select id="category" name="category" class="form-input">
           <option value="">— Aucune catégorie —</option>
-          <!-- <option value="sms">📱 SMS frauduleux</option>
+          <option value="sms">📱 SMS frauduleux</option>
           <option value="email">📧 Email suspect</option>
           <option value="password">🔓 Mot de passe volé</option>
           <option value="wifi">📶 Wi-Fi public</option>
           <option value="payment">💳 Paiement bloqué</option>
           <option value="app">📲 App malveillante</option>
-          <option value="account">🤕 Compte piraté</option> -->
+          <option value="account">🤕 Compte piraté</option>
           <option value="general">🛡️ Sécurité générale</option>
           <option value="games">🎮 Jeux</option>
           <option value="radar">📡 Radar</option>
@@ -297,6 +297,31 @@
           <option value="misc">🎲 Divers</option>
           <option value="infos">ℹ️ Infos</option>
           <option value="deals">🏷️ Bon plan</option>
+        </select> -->
+        <select name="category" id="category" class="form-input">
+          <option value="">— Aucune catégorie —</option>
+          <!-- Mini formulaire : nouvelle catégorie (masqué par défaut) -->
+          <div id="new-category-box" style="display:none; margin-top: var(--space-sm); padding: var(--space-sm); border:1px dashed var(--color-border); border-radius: var(--radius-sm);">
+            <div class="form-group">
+              <label class="form-label" for="new-cat-label">Libellé</label>
+              <input type="text" id="new-cat-label" class="form-input" placeholder="Ex : Maison connectée" maxlength="40" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="new-cat-icon">Emoji</label>
+              <input type="text" id="new-cat-icon" class="form-input" placeholder="🏠" maxlength="4" style="width:80px;" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="new-cat-risk">Niveau</label>
+              <select id="new-cat-risk" class="form-input">
+                <option value="">Neutre</option>
+                <option value="card__risk--danger">Danger (rouge)</option>
+                <option value="card__risk--warning">Vigilance (orange)</option>
+                <option value="card__risk--safe">Sûr (vert)</option>
+              </select>
+            </div>
+            <button type="button" id="save-new-cat-btn" class="form-submit" style="min-height:44px;">💾 Créer la catégorie</button>
+            <button type="button" id="cancel-new-cat-btn" class="admin-item__btn">✖ Annuler</button>
+          </div>
         </select>
         <small style="color: var(--color-text-muted); font-size: 0.8rem; display: block; margin-top: var(--space-xs);">
           Choisissez une catégorie existante. Plus tard, vous pourrez en créer de nouvelles.
@@ -340,22 +365,24 @@
   let editingId = null;
 
     // Libellés des catégories (pour l'affichage dans la liste admin)
-  const categoryMap = {
-    sms:     { label: '📱 SMS frauduleux' },
-    email:   { label: '📧 Email suspect' },
-    password:{ label: '🔓 Mot de passe' },
-    wifi:    { label: '📶 Wi-Fi public' },
-    payment: { label: '💳 Paiement' },
-    app:     { label: '📲 App malveillante' },
-    account: { label: '🤕 Compte piraté' },
-    general: { label: '🛡️ Sécurité' },
-    games:   { label: '🎮 Jeux' },
-    radar:   { label: '📡 Radar menaces' },
-    tools:   { label: '🧰 Outils' },
-    misc:    { label: '🎲 Divers' },
-    infos:   { label: 'ℹ️ Infos' },
-    deals:   { label: '🏷️ Bon plan' },
-  };
+  // const categoryMap = {
+  //   sms:     { label: '📱 SMS frauduleux' },
+  //   email:   { label: '📧 Email suspect' },
+  //   password:{ label: '🔓 Mot de passe' },
+  //   wifi:    { label: '📶 Wi-Fi public' },
+  //   payment: { label: '💳 Paiement' },
+  //   app:     { label: '📲 App malveillante' },
+  //   account: { label: '🤕 Compte piraté' },
+  //   general: { label: '🛡️ Sécurité' },
+  //   games:   { label: '🎮 Jeux' },
+  //   radar:   { label: '📡 Radar menaces' },
+  //   tools:   { label: '🧰 Outils' },
+  //   misc:    { label: '🎲 Divers' },
+  //   infos:   { label: 'ℹ️ Infos' },
+  //   deals:   { label: '🏷️ Bon plan' },
+  // };
+    // Catégories chargées dynamiquement depuis Supabase
+  let categoryMap = {}; // sera rempli par loadCategories()
 
   // 3. IMPORTATION DES FONCTIONS (Après la vérification)
   // Note: Si supabase-client.js utilise aussi window.supabase, ça marchera car on a initialisé plus haut.
@@ -430,6 +457,11 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const fd = new FormData(form);
+      // Sécurité : la valeur sentinel __new__ ne doit jamais être publiée
+    if (fd.get('category') === '__new__') {
+      alert('Termine ou annule la création de la catégorie avant de publier.');
+      return;
+    }
     const content = {
       title: fd.get('title').trim(),
       description: fd.get('description').trim(),
@@ -460,6 +492,98 @@
     }
   });
 
+    // ========================================
+  // CHARGEMENT DYNAMIQUE DES CATÉGORIES
+  // ========================================
+  async function loadCategories() {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('key, label, icon')
+      .order('sort_order', { ascending: true });
+
+    if (error) { console.error('Erreur catégories:', error); return; }
+
+    // Reconstruit la map pour les badges de la liste
+    categoryMap = {};
+    data.forEach(c => { categoryMap[c.key] = { label: (c.icon || '•') + ' ' + c.label }; });
+
+    // Remplit le select
+    const select = document.getElementById('category');
+    const current = select.value; // conserve la sélection si re-chargement
+    select.innerHTML = '<option value="">— Aucune catégorie —</option>';
+
+    data.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.key;
+      opt.textContent = (c.icon || '•') + ' ' + c.label;
+      select.appendChild(opt);
+    });
+
+    // Option magique en fin de liste
+    const magic = document.createElement('option');
+    magic.value = '__new__';
+    magic.textContent = '➕ Nouvelle catégorie…';
+    select.appendChild(magic);
+
+    if (current) select.value = current;
+  }
+
+  // ========================================
+  // CRÉATION D'UNE NOUVELLE CATÉGORIE
+  // ========================================
+  function slugify(text) {
+    return text.toString().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // retire les accents
+      .replace(/[^a-z0-9]+/g, '-')                      // non-alphanumérique → tiret
+      .replace(/^-+|-+$/g, '');                        // tirets en trop aux bords
+  }
+
+  async function saveNewCategory() {
+    const label = document.getElementById('new-cat-label').value.trim();
+    const icon  = document.getElementById('new-cat-icon').value.trim();
+    const risk  = document.getElementById('new-cat-risk').value;
+    if (!label) { alert('Donne un libellé à ta catégorie.'); return; }
+
+    const key = slugify(label);
+    if (!key) { alert('Libellé invalide.'); return; }
+
+    const { count } = await supabase.from('categories').select('key', { count: 'exact', head: true });
+
+    const { error } = await supabase.from('categories').insert({
+      key,
+      label,
+      icon: icon || '📌',
+      risk_class: risk,
+      sort_order: (count || 0) + 100 // nouvelle catégorie en fin de liste
+    });
+
+    if (error) {
+      alert('Erreur : ' + error.message + (error.code === '23505' ? ' (cette clé existe déjà)' : ''));
+      return;
+    }
+
+    // Réinitialise et recharge
+    document.getElementById('new-category-box').style.display = 'none';
+    document.getElementById('new-cat-label').value = '';
+    document.getElementById('new-cat-icon').value = '';
+    await loadCategories();
+    document.getElementById('category').value = key; // sélectionne la nouvelle catégorie
+  }
+
+  // ========================================
+  // ÉVÉNEMENTS DU MINI FORMULAIRE
+  // ========================================
+  document.getElementById('category').addEventListener('change', (e) => {
+    const box = document.getElementById('new-category-box');
+    box.style.display = (e.target.value === '__new__') ? 'block' : 'none';
+  });
+
+  document.getElementById('save-new-cat-btn').addEventListener('click', saveNewCategory);
+
+  document.getElementById('cancel-new-cat-btn').addEventListener('click', () => {
+    document.getElementById('new-category-box').style.display = 'none';
+    document.getElementById('category').value = '';
+  });
   // ========================================
   // LISTE ADMIN
   // ========================================
@@ -556,6 +680,8 @@
   }
 
   // Initialisation
+  loadAdminList();
+  loadCategories();
   loadAdminList();
 </script>
 </body>
