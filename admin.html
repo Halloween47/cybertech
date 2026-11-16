@@ -283,13 +283,13 @@
         <label class="form-label" for="category">Catégorie</label>
         <select id="category" name="category" class="form-input">
           <option value="">— Aucune catégorie —</option>
-          <option value="sms">📱 SMS frauduleux</option>
+          <!-- <option value="sms">📱 SMS frauduleux</option>
           <option value="email">📧 Email suspect</option>
           <option value="password">🔓 Mot de passe volé</option>
           <option value="wifi">📶 Wi-Fi public</option>
           <option value="payment">💳 Paiement bloqué</option>
           <option value="app">📲 App malveillante</option>
-          <option value="account">🤕 Compte piraté</option>
+          <option value="account">🤕 Compte piraté</option> -->
           <option value="general">🛡️ Sécurité générale</option>
           <option value="games">🎮 Jeux</option>
           <option value="radar">📡 Radar</option>
@@ -335,6 +335,9 @@
 
     console.log('✅ Utilisateur connecté:', session.user.email);
   })();
+
+  // Mode édition : contient l'ID du contenu en cours de modification, ou null
+  let editingId = null;
 
   // 3. IMPORTATION DES FONCTIONS (Après la vérification)
   // Note: Si supabase-client.js utilise aussi window.supabase, ça marchera car on a initialisé plus haut.
@@ -464,6 +467,7 @@
             <div class="admin-item__meta">${new Date(item.created_at).toLocaleDateString('fr-FR')}</div>
             <div class="admin-item__actions">
               <a href="${escapeHtml(item.target_url)}" target="_blank" rel="noopener noreferrer" class="admin-item__btn admin-item__btn--edit">Ouvrir</a>
+              <button onclick="handleEdit(${item.id})" class="admin-item__btn admin-item__btn--edit">✏️ Modifier</button>
               <button onclick="handleDelete(${item.id})" class="admin-item__btn admin-item__btn--delete">Supprimer</button>
             </div>
           </div>
@@ -481,6 +485,49 @@
     const { error } = await deleteContent(id);
     if (error) { alert('Erreur: ' + error.message); return; }
     loadAdminList();
+  };
+  
+  // ========================================
+  // MODE ÉDITION
+  // ========================================
+  window.handleEdit = async (id) => {
+    // Récupère le contenu depuis Supabase
+    const { data, error } = await supabase
+      .from('content')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) { alert('Erreur : ' + error.message); return; }
+
+    // Remplit le formulaire avec les données existantes
+    urlInput.value = data.target_url || '';
+    titleInput.value = data.title || '';
+    descInput.value = data.description || '';
+    imageInput.value = data.image_url || '';
+    if (data.image_url) {
+      imagePreview.src = data.image_url;
+      imagePreview.classList.add('visible');
+    }
+    if (data.category) {
+      document.getElementById('category').value = data.category;
+    }
+
+    // Active le mode édition
+    editingId = id;
+    form.querySelector('.form-submit').textContent = '💾 Mettre à jour';
+    document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+
+    // Scroll doux vers le formulaire
+    form.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  window.cancelEdit = () => {
+    editingId = null;
+    form.reset();
+    imagePreview.classList.remove('visible');
+    form.querySelector('.form-submit').textContent = 'Publier';
+    document.getElementById('cancel-edit-btn').style.display = 'none';
   };
 
   function escapeHtml(text) {
