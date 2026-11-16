@@ -299,7 +299,29 @@
 .tag--active:focus-visible {
   background: rgba(0, 212, 255, 0.2) !important;
 }
-  
+  /* ========================================
+   BARRE DE FILTRES HORIZONTALE (style Netflix)
+   ======================================== */
+#tags-nav {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch; /* défilement fluide iOS */
+  padding: var(--space-xs) var(--space-sm);
+}
+
+#tags-nav .tag {
+  flex: 0 0 auto;               /* le bouton garde sa taille, jamais écrasé */
+  scroll-snap-align: start;
+  white-space: nowrap;          /* libellé sur une seule ligne */
+}
+
+#tags-nav::-webkit-scrollbar { height: 4px; }
+#tags-nav::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+}
   /* ========================================
      GUIDES — Section cartes micro-learning
      ======================================== */
@@ -812,4 +834,15 @@
   border-radius: var(--radius-pill);
   color: var(--color-text-muted);
   margin: var(--space-xs) 0;
+}
+
+/* ========================================
+   LIGNES DE CONTENU PAR CATÉGORIE
+   ======================================== */
+.row { margin-bottom: var(--space-lg); }
+
+.row__title {
+  font-size: 1.1rem;
+  margin: 0 var(--space-sm) var(--space-xs);
+  color: var(--color-text);
 }

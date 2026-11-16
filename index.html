@@ -61,11 +61,20 @@
   <nav class="tags" id="tags-nav">
   </nav>
   <!-- ===================== CARTES MICRO-LEARNING ===================== -->
-  <section class="guides" id="guides" aria-label="Guides de prévention">
+  <!-- <section class="guides" id="guides" aria-label="Guides de prévention">
     <h2 class="guides__title">Guides essentiels</h2>
     <p class="guides__subtitle">Courts, clairs et directs. Choisissez un sujet.</p>
 
     <div class="guides__grid" id="content-grid">
+      <p class="loading-message">Chargement des guides...</p>
+    </div>
+  </section> -->
+  <section class="guides" id="guides" aria-label="Guides de prévention">
+    <h2 class="guides__title">Guides essentiels</h2>
+    <p class="guides__subtitle">Courts, clairs et directs. Choisissez un sujet.</p>
+
+    <!-- Les lignes sont générées par le JS : 1 ligne par catégorie -->
+    <div id="rows-container">
       <p class="loading-message">Chargement des guides...</p>
     </div>
   </section>
@@ -115,6 +124,9 @@
     const heroTitle = document.getElementById('hero-title');
     const heroSubtitle = document.getElementById('hero-subtitle');
     const heroCta = document.getElementById('hero-cta');
+
+    const rowsContainer = document.getElementById('rows-container');
+    let allCategories = [];   // liste ordonnée des catégories chargées
   
     // const categoryMap = {
     //   sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
@@ -190,38 +202,103 @@
     // Optionnel : on pourrait changer l'icône du Hero selon la catégorie
     // heroTitle.innerHTML = `${catInfo.icon} ${heroTitle.innerHTML}`;
   }
-    function renderCards(contents) {
-      if (contents.length === 0) {
-        grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
-        return;
-      }
+    // function renderCards(contents) {
+    //   if (contents.length === 0) {
+    //     grid.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
+    //     return;
+    //   }
   
-      grid.innerHTML = '';
+    //   grid.innerHTML = '';
   
-      contents.forEach(item => {
-        const card = document.createElement('article');
-        card.className = 'card';
-        card.dataset.category = item.category || 'general';
+    //   contents.forEach(item => {
+    //     const card = document.createElement('article');
+    //     card.className = 'card';
+    //     card.dataset.category = item.category || 'general';
   
-        const catInfo = categoryMap[item.category] || categoryMap.general;
+    //     const catInfo = categoryMap[item.category] || categoryMap.general;
   
-        card.innerHTML = `
-          ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
-          <div class="card__header">
-            <span class="card__icon" aria-hidden="true">${catInfo.icon}</span>
-            <span class="card__risk ${catInfo.riskClass}">${catInfo.label}</span>
-          </div>
-          <h3 class="card__title">${escapeHtml(item.title)}</h3>
-          <p class="card__desc">${escapeHtml(item.description)}</p>
-          <div class="card__footer">
-            <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
-            <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+    //     card.innerHTML = `
+    //       ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
+    //       <div class="card__header">
+    //         <span class="card__icon" aria-hidden="true">${catInfo.icon}</span>
+    //         <span class="card__risk ${catInfo.riskClass}">${catInfo.label}</span>
+    //       </div>
+    //       <h3 class="card__title">${escapeHtml(item.title)}</h3>
+    //       <p class="card__desc">${escapeHtml(item.description)}</p>
+    //       <div class="card__footer">
+    //         <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
+    //         <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
+    //       </div>
+    //     `;
+    //     grid.appendChild(card);
+    //   });
+    // }
+  
+      // Construit UNE carte (réutilise ton template existant)
+  function buildCard(item) {
+    const card = document.createElement('article');
+    card.className = 'card';
+    const catInfo = categoryMap[item.category] || categoryMap.general;
+
+    card.innerHTML = `
+      ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" class="card__image" loading="lazy" />` : ''}
+      <div class="card__header">
+        <span class="card__icon" aria-hidden="true">${catInfo.icon}</span>
+        <span class="card__risk ${catInfo.riskClass}">${catInfo.label}</span>
+      </div>
+      <h3 class="card__title">${escapeHtml(item.title)}</h3>
+      <p class="card__desc">${escapeHtml(item.description)}</p>
+      <div class="card__footer">
+        <span class="card__time">${new Date(item.created_at).toLocaleDateString('fr-FR')}</span>
+        <a href="${escapeHtml(item.target_url)}" class="card__link" target="_blank" rel="noopener noreferrer">En savoir plus →</a>
+      </div>
+    `;
+    return card;
+  }
+
+  // Construit UNE ligne : titre + carrousel horizontal
+  function buildRow(label, contents, categoryKey) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.dataset.category = categoryKey;
+
+    const title = document.createElement('h3');
+    title.className = 'row__title';
+    title.textContent = label;
+
+    const grid = document.createElement('div');
+    grid.className = 'guides__grid';   // réutilise le carrousel Netflix validé
+    contents.forEach(item => grid.appendChild(buildCard(item)));
+
+    row.appendChild(title);
+    row.appendChild(grid);
+    return row;
+  }
+
+  // Construit TOUTES les lignes : "Toutes les ressources" + 1 par catégorie non vide
+  function renderRows(contents) {
+    rowsContainer.innerHTML = '';
+
+    if (!contents || contents.length === 0) {
+      rowsContainer.innerHTML = '<p class="empty-message">Aucun guide disponible pour l\'instant.</p>';
+      return;
     }
-  
+
+    // Ligne 1 : toutes les ressources
+    rowsContainer.appendChild(buildRow('📚 Toutes les ressources', contents, 'all'));
+
+    // Puis une ligne par catégorie qui possède au moins 1 guide
+    allCategories.forEach(cat => {
+      const items = contents.filter(item => (item.category || 'general') === cat.key);
+      if (items.length === 0) return; // pas de ligne vide
+      rowsContainer.appendChild(buildRow(
+        (cat.icon ? cat.icon + ' ' : '') + cat.label,
+        items,
+        cat.key
+      ));
+    });
+  }
+
     function updateLastUpdateBadge() {
       if (!lastUpdateBadge || allContents.length === 0) return;
   
@@ -234,25 +311,25 @@
       lastUpdateBadge.innerHTML = `🟢 Dernière mise à jour : ${formattedDate}`;
     }
   
-    function filterContents(category) {
-      if (category === 'all') {
-        renderCards(allContents);
-      } else {
-        const filtered = allContents.filter(item => (item.category || 'general') === category);
-        renderCards(filtered);
-      }
+    // function filterContents(category) {
+    //   if (category === 'all') {
+    //     renderCards(allContents);
+    //   } else {
+    //     const filtered = allContents.filter(item => (item.category || 'general') === category);
+    //     renderCards(filtered);
+    //   }
   
-      // tags.forEach(tag => {
-      //   if (tag.dataset.category === category) {
-      //     tag.classList.add('tag--active');
-      //   } else {
-      //     tag.classList.remove('tag--active');
-      //   }
-      // });
-      tagsNav.querySelectorAll('.tag').forEach(tag => {
-        tag.classList.toggle('tag--active', tag.dataset.category === category);
-      });
-    }
+    //   // tags.forEach(tag => {
+    //   //   if (tag.dataset.category === category) {
+    //   //     tag.classList.add('tag--active');
+    //   //   } else {
+    //   //     tag.classList.remove('tag--active');
+    //   //   }
+    //   // });
+    //   tagsNav.querySelectorAll('.tag').forEach(tag => {
+    //     tag.classList.toggle('tag--active', tag.dataset.category === category);
+    //   });
+    // }
     
   
     // async function init() {
@@ -289,7 +366,36 @@
     //     grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
     //   }
     // }
-        async function init() {
+      function filterContents(category) {
+    const rows = rowsContainer.querySelectorAll('.row');
+    let anyVisible = false;
+
+    rows.forEach(row => {
+      const show = (category === 'all') || (row.dataset.category === category);
+      row.classList.toggle('is-hidden', !show);
+      if (show) anyVisible = true;
+    });
+
+    // Message si la catégorie ne possède aucune ligne (catégorie vide)
+    let msg = rowsContainer.querySelector('.filter-empty');
+    if (!anyVisible && rows.length > 0) {
+      if (!msg) {
+        msg = document.createElement('p');
+        msg.className = 'empty-message filter-empty';
+        rowsContainer.appendChild(msg);
+      }
+      msg.textContent = 'Aucun guide dans cette catégorie pour l\'instant.';
+    } else if (msg) {
+      msg.remove();
+    }
+
+    // Surlignage du bouton actif (inchangé)
+    tagsNav.querySelectorAll('.tag').forEach(tag => {
+      tag.classList.toggle('tag--active', tag.dataset.category === category);
+    });
+  } 
+    
+    async function init() {
       try {
         // 1. Charger les catégories (avec secours si panne)
         const catsResult = await fetchCategories();
@@ -319,7 +425,8 @@
   
         updateHero(allContents);
         updateLastUpdateBadge();
-        renderCards(allContents);
+        // renderCards(allContents);
+        renderRows(allContents);
   
       } catch (err) {
         console.error('Erreur:', err);
