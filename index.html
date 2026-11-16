@@ -86,6 +86,24 @@
       <button class="tag" role="listitem" type="button" data-category="account">
         🤕 Compte piraté
       </button>
+      <button class="tag" data-category="games">
+        🎮 Jeux
+      </button>
+      <button class="tag" data-category="radar">
+        📡 Radar
+      </button>
+      <button class="tag" data-category="tools">
+        🧰 Outils
+      </button>
+      <button class="tag" data-category="misc">
+        🎲 Divers
+      </button>
+      <button class="tag" data-category="infos">
+        ℹ️ Infos
+      </button>
+      <button class="tag" data-category="deals">
+        🏷️ Bon plan
+      </button>
     </div>
   </nav>
 
@@ -148,7 +166,13 @@
       payment: { label: 'Paiement', riskClass: 'card__risk--warning', icon: '💳' },
       app: { label: 'App malveillante', riskClass: '', icon: '📲' },
       account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
-      general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' }
+      general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' },
+      games:   { icon: "🎮", color: "safe"    },
+      radar:   { icon: "📡", color: "warning" },
+      tools:   { icon: "🧰", color: "safe"    },
+      misc:    { icon: "🎲", color: "default" },
+      infos:   { icon: "ℹ️", color: "safe"    },
+      deals:   { icon: "🏷️", color: "warning" },
     };
   
     let allContents = [];
