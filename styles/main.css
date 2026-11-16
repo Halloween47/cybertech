@@ -141,6 +141,7 @@
     font-size: 0.8rem;
     font-weight: 600;
     /* margin-bottom: var(--space-md); */
+    max-width: 480px;
     margin: 0 auto;
   }
   
