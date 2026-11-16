@@ -276,7 +276,7 @@
   }
 
   // Construit TOUTES les lignes : "Toutes les ressources" + 1 par catégorie non vide
-  function renderRows(contents) {
+    function renderRows(contents) {
     rowsContainer.innerHTML = '';
 
     if (!contents || contents.length === 0) {
@@ -287,25 +287,21 @@
     // Ligne 1 : toutes les ressources
     rowsContainer.appendChild(buildRow('📚 Toutes les ressources', contents, 'all'));
 
-    // // Puis une ligne par catégorie qui possède au moins 1 guide
-    // allCategories.forEach(cat => {
-    //   const items = contents.filter(item => (item.category || 'general') === cat.key);
-    //   if (items.length === 0) return; // pas de ligne vide
-    //   rowsContainer.appendChild(buildRow(
-    //     (cat.icon ? cat.icon + ' ' : '') + cat.label,
-    //     items,
-    //     cat.key
-    //   ));
-    // });
-            allCategories.forEach(cat => {
+    // Puis une ligne par catégorie qui possède au moins 1 guide
+    allCategories.forEach(cat => {
       const items = contents.filter(item => {
         const raw = item.category;
         const effective = (!raw || raw === 'undefined') ? 'general' : raw;
         return effective === cat.key;
       });
       if (items.length === 0) return; // pas de ligne vide
-      })
-    
+
+      rowsContainer.appendChild(buildRow(
+        (cat.icon ? cat.icon + ' ' : '') + cat.label,
+        items,
+        cat.key
+      ));
+    });
   }
 
     function updateLastUpdateBadge() {
