@@ -409,7 +409,7 @@
           : DEFAULT_CATEGORIES;
         buildCategoryMap(categories);
         buildTagButtons(categories);
-
+        allCategories = categories; // alimente la liste utilisée par renderRows
         // 2. Brancher le filtrage (délégation : survit aux re-rendus des boutons)
         tagsNav.addEventListener('click', (e) => {
           const btn = e.target.closest('.tag');
