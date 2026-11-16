@@ -856,4 +856,5 @@
   border-radius: var(--radius-lg);
   box-shadow: 0 0 40px rgba(0, 212, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.45);
   margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
 }
