@@ -322,11 +322,46 @@
     margin-bottom: var(--space-md);
   }
   
-  .guides__grid {
+  /* .guides__grid {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
+  } */
+   /* ========================================
+   GRILLE DE GUIDES → CARROUSEL NETFLIX STYLE
+   ======================================== */
+.guides__grid {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;                /* Défilement horizontal */
+  scroll-snap-type: x mandatory;  /* "Magnétisme" : la carte s'aligne toute seule */
+  padding: var(--space-xs) var(--space-sm) var(--space-md);
+  /* Barre de défilement discrète */
+  scrollbar-width: thin;
+}
+
+/* Chaque carte devient une "slide" */
+.guides__grid > * {
+  flex: 0 0 280px;                 /* Largeur fixe des cartes (ajuste si besoin) */
+  scroll-snap-align: start;        /* Alignement magnétique au bord gauche */
+}
+
+/* Masquer la scrollbar pour un look Netflix (facultatif) */
+.guides__grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.guides__grid::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+}
+
+/* Sur desktop : plusieurs cartes visibles côte à côte */
+@media (min-width: 768px) {
+  .guides__grid > * {
+    flex: 0 0 320px;
   }
+}
   
   /* ========================================
      CARD — Composant réutilisable
