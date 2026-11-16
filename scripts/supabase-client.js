@@ -21,6 +21,15 @@ export function fetchPublishedContent() {
     .order('created_at', { ascending: false });
 }
 
+  // Récupère les catégories triées pour l'affichage
+  export async function fetchCategories() {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('key, label, icon, risk_class')
+      .order('sort_order', { ascending: true });
+    return { data, error };
+  }
+
 export function fetchAllContent() {
   return getClient().from('content')
     .select('*')

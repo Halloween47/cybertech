@@ -58,55 +58,8 @@
     </section>
 
   <!-- ===================== TAGS SCÉNARIOS ===================== -->
-  <nav class="tags" aria-label="Recherche par scénario">
-    <p class="tags__label">Quel est votre problème ?</p>
-
-    <div class="tags__scroll" role="list">
-      <button class="tag tag--active" role="listitem" type="button" data-category="all">
-        🎯 Tous
-      </button>
-      <button class="tag tag--danger" role="listitem" type="button" data-category="sms">
-        📱 SMS frauduleux
-      </button>
-      <button class="tag tag--danger" role="listitem" type="button" data-category="email">
-        📧 Email suspect
-      </button>
-      <button class="tag tag--warning" role="listitem" type="button" data-category="password">
-        🔓 Mot de passe volé
-      </button>
-      <button class="tag" role="listitem" type="button" data-category="wifi">
-        📶 Wi-Fi public
-      </button>
-      <button class="tag tag--warning" role="listitem" type="button" data-category="payment">
-        💳 Paiement bloqué
-      </button>
-      <button class="tag" role="listitem" type="button" data-category="app">
-        📲 App malveillante
-      </button>
-      <button class="tag" role="listitem" type="button" data-category="account">
-        🤕 Compte piraté
-      </button>
-      <button class="tag" data-category="games">
-        🎮 Jeux
-      </button>
-      <button class="tag" data-category="radar">
-        📡 Radar
-      </button>
-      <button class="tag" data-category="tools">
-        🧰 Outils
-      </button>
-      <button class="tag" data-category="misc">
-        🎲 Divers
-      </button>
-      <button class="tag" data-category="infos">
-        ℹ️ Infos
-      </button>
-      <button class="tag" data-category="deals">
-        🏷️ Bon plan
-      </button>
-    </div>
+  <nav class="tags" id="tags-nav">
   </nav>
-
   <!-- ===================== CARTES MICRO-LEARNING ===================== -->
   <section class="guides" id="guides" aria-label="Guides de prévention">
     <h2 class="guides__title">Guides essentiels</h2>
@@ -147,10 +100,15 @@
   <!-- ===================== SCRIPT POUR CHARGEMENT DES CONTENUS ===================== -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
-    import { fetchPublishedContent } from '/scripts/supabase-client.js';
+    // import { fetchPublishedContent } from '/scripts/supabase-client.js';
+  
+    // const grid = document.getElementById('content-grid');
+    // const tags = document.querySelectorAll('.tag');
+    // const lastUpdateBadge = document.querySelector('#last-update-badge');
+        import { fetchPublishedContent, fetchCategories } from '/scripts/supabase-client.js';
   
     const grid = document.getElementById('content-grid');
-    const tags = document.querySelectorAll('.tag');
+    const tagsNav = document.getElementById('tags-nav');
     const lastUpdateBadge = document.querySelector('#last-update-badge');
     
     // Éléments du Hero
@@ -167,29 +125,45 @@
     //   app: { label: 'App malveillante', riskClass: '', icon: '📲' },
     //   account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
     //   general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' },
-    //   games:   { label: 'Jeux', riskClass: 'card__risk--safe', icon: "🎮" },
-    //   radar:   { icon: "📡", color: "warning" },
-    //   tools:   { icon: "🧰", color: "safe"    },
-    //   misc:    { icon: "🎲", color: "default" },
-    //   infos:   { icon: "ℹ️", color: "safe"    },
-    //   deals:   { icon: "🏷️", color: "warning" },
+    //   games: { label: 'Jeux', riskClass: 'card__risk--safe', icon: '🎮' },
+    //   radar: { label: 'Radar menaces', riskClass: 'card__risk--warning', icon: '📡' },
+    //   tools: { label: 'Outils', riskClass: 'card__risk--safe', icon: '🧰' },
+    //   misc: { label: 'Divers', riskClass: '', icon: '🎲' },
+    //   infos: { label: 'Infos', riskClass: 'card__risk--safe', icon: 'ℹ️' },
+    //   deals: { label: 'Bon plan', riskClass: 'card__risk--warning', icon: '🏷️' },
     // };
-    const categoryMap = {
-      sms: { label: 'SMS frauduleux', riskClass: 'card__risk--danger', icon: '📱' },
-      email: { label: 'Email suspect', riskClass: 'card__risk--danger', icon: '📧' },
-      password: { label: 'Mot de passe', riskClass: 'card__risk--warning', icon: '🔓' },
-      wifi: { label: 'Wi-Fi public', riskClass: 'card__risk--safe', icon: '📶' },
-      payment: { label: 'Paiement', riskClass: 'card__risk--warning', icon: '💳' },
-      app: { label: 'App malveillante', riskClass: '', icon: '📲' },
-      account: { label: 'Compte piraté', riskClass: '', icon: '🤕' },
-      general: { label: 'Sécurité', riskClass: 'card__risk--safe', icon: '🛡️' },
-      games: { label: 'Jeux', riskClass: 'card__risk--safe', icon: '🎮' },
-      radar: { label: 'Radar menaces', riskClass: 'card__risk--warning', icon: '📡' },
-      tools: { label: 'Outils', riskClass: 'card__risk--safe', icon: '🧰' },
-      misc: { label: 'Divers', riskClass: '', icon: '🎲' },
-      infos: { label: 'Infos', riskClass: 'card__risk--safe', icon: 'ℹ️' },
-      deals: { label: 'Bon plan', riskClass: 'card__risk--warning', icon: '🏷️' },
-    };
+        // Catégories : chargées depuis la base, avec secours en cas de panne
+    let categoryMap = {};
+      function buildTagButtons(categories) {
+        const nav = document.getElementById('tags-nav');
+        nav.innerHTML = '';
+
+        // Bouton "Tous" toujours en premier
+        const all = document.createElement('button');
+        all.className = 'tag tag--active';
+        all.dataset.category = 'all';
+        all.textContent = '🎯 Tous';
+        nav.appendChild(all);
+
+        categories.forEach((c) => {
+          const btn = document.createElement('button');
+          btn.className = 'tag';
+          btn.dataset.category = c.key;
+          btn.textContent = (c.icon ? c.icon + ' ' : '') + c.label;
+          nav.appendChild(btn);
+        });
+      }
+
+    const DEFAULT_CATEGORIES = [
+      { key: 'general', label: 'Sécurité', icon: '🛡️', risk_class: 'card__risk--safe' },
+    ];
+
+    function buildCategoryMap(categories) {
+      categoryMap = {};
+      categories.forEach((c) => {
+        categoryMap[c.key] = { label: c.label, riskClass: c.risk_class || '', icon: c.icon };
+      });
+    }
   
     let allContents = [];
   
@@ -268,17 +242,71 @@
         renderCards(filtered);
       }
   
-      tags.forEach(tag => {
-        if (tag.dataset.category === category) {
-          tag.classList.add('tag--active');
-        } else {
-          tag.classList.remove('tag--active');
-        }
+      // tags.forEach(tag => {
+      //   if (tag.dataset.category === category) {
+      //     tag.classList.add('tag--active');
+      //   } else {
+      //     tag.classList.remove('tag--active');
+      //   }
+      // });
+      tagsNav.querySelectorAll('.tag').forEach(tag => {
+        tag.classList.toggle('tag--active', tag.dataset.category === category);
       });
     }
+    
   
-    async function init() {
+    // async function init() {
+    //   try {
+    //     const { data, error } = await fetchPublishedContent();
+  
+    //     if (error) {
+    //       grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
+    //       console.error('Erreur:', error);
+    //       return;
+    //     }
+  
+    //     allContents = data;
+        
+    //     // 1. Mettre à jour le Hero avec le contenu le plus récent
+    //     updateHero(allContents);
+  
+    //     // 2. Mettre à jour le badge de date
+    //     updateLastUpdateBadge();
+  
+    //     // 3. Afficher toutes les cartes
+    //     renderCards(allContents);
+  
+    //     // 4. Activer les listeners sur les tags
+    //     tags.forEach(tag => {
+    //       tag.addEventListener('click', () => {
+    //         const category = tag.dataset.category;
+    //         filterContents(category);
+    //       });
+    //     });
+  
+    //   } catch (err) {
+    //     console.error('Erreur:', err);
+    //     grid.innerHTML = '<p class="error-message">Erreur de chargement.</p>';
+    //   }
+    // }
+        async function init() {
       try {
+        // 1. Charger les catégories (avec secours si panne)
+        const catsResult = await fetchCategories();
+        const categories = (!catsResult.error && catsResult.data && catsResult.data.length > 0)
+          ? catsResult.data
+          : DEFAULT_CATEGORIES;
+        buildCategoryMap(categories);
+        buildTagButtons(categories);
+
+        // 2. Brancher le filtrage (délégation : survit aux re-rendus des boutons)
+        tagsNav.addEventListener('click', (e) => {
+          const btn = e.target.closest('.tag');
+          if (!btn) return;
+          filterContents(btn.dataset.category);
+        });
+
+        // 3. Charger les contenus
         const { data, error } = await fetchPublishedContent();
   
         if (error) {
@@ -288,23 +316,10 @@
         }
   
         allContents = data;
-        
-        // 1. Mettre à jour le Hero avec le contenu le plus récent
+  
         updateHero(allContents);
-  
-        // 2. Mettre à jour le badge de date
         updateLastUpdateBadge();
-  
-        // 3. Afficher toutes les cartes
         renderCards(allContents);
-  
-        // 4. Activer les listeners sur les tags
-        tags.forEach(tag => {
-          tag.addEventListener('click', () => {
-            const category = tag.dataset.category;
-            filterContents(category);
-          });
-        });
   
       } catch (err) {
         console.error('Erreur:', err);
